@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lyca Finance Dashboard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#eef2f7;--sf:#fff;--sf2:#f5f7fb;--bd:#dde3ee;--bd2:#c8d0e0;
+  --ac:#1e4db7;--acl:#e8effe;--acd:#1a3e99;
+  --gr:#15803d;--grl:#dcfce7;--rd:#c81c1c;--rdl:#fee2e2;
+  --am:#b45309;--aml:#fef3c7;--pu:#6d28d9;--cy:#0369a1;
+  --tx:#0d1b3e;--t2:#3d5070;--t3:#7a8fa8;--t4:#dde3ee;
+  --r:10px;--sh:0 1px 3px rgba(13,27,62,.07),0 4px 14px rgba(13,27,62,.05);
+  --sh2:0 2px 8px rgba(13,27,62,.12),0 8px 28px rgba(13,27,62,.08);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--tx);font-family:'Plus Jakarta Sans',sans-serif;font-size:13.5px;min-height:100vh}
+/* WATERMARK */
+body::after{content:'LYCA';position:fixed;bottom:28px;right:28px;font-size:52px;font-weight:800;color:rgba(30,77,183,.07);pointer-events:none;z-index:0;letter-spacing:-2px;transform:rotate(-15deg);font-family:'Plus Jakarta Sans',sans-serif}
+/* HEADER */
+header{background:linear-gradient(135deg,var(--ac) 0%,var(--acd) 100%);padding:0 20px;display:flex;align-items:center;justify-content:space-between;height:52px;position:sticky;top:0;z-index:400;box-shadow:0 2px 10px rgba(13,27,62,.25)}
+.brand{display:flex;align-items:center;gap:10px}
+.brand-icon{width:30px;height:30px;background:rgba(255,255,255,.18);border:1.5px solid rgba(255,255,255,.35);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;letter-spacing:-1px}
+.brand-text .bn{font-weight:800;font-size:14px;color:#fff;letter-spacing:-.3px}
+.brand-text .bt{font-size:9px;color:rgba(255,255,255,.58);letter-spacing:.3px}
+.hdr-r{display:flex;gap:7px;align-items:center}
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:5px;padding:6px 13px;border-radius:6px;font-family:inherit;font-weight:600;font-size:12px;cursor:pointer;border:1px solid transparent;transition:all .15s;white-space:nowrap}
+.btn-wh{background:rgba(255,255,255,.16);color:#fff;border-color:rgba(255,255,255,.3)}.btn-wh:hover{background:rgba(255,255,255,.25)}
+.btn-pr{background:var(--ac);color:#fff}.btn-pr:hover{background:var(--acd)}
+.btn-gh{background:transparent;color:var(--t2);border-color:var(--bd2)}.btn-gh:hover{background:var(--sf2);color:var(--tx)}
+.btn-danger{background:transparent;color:var(--rd);border-color:#fca5a5;font-size:11px;padding:3px 8px}.btn-danger:hover{background:var(--rdl)}
+.btn-sm{padding:4px 9px;font-size:11px}
+/* POPOVER */
+#pop-bg{display:none;position:fixed;inset:0;background:rgba(13,27,62,.3);z-index:450;backdrop-filter:blur(2px)}
+#pop{display:none;position:fixed;top:58px;right:14px;z-index:500;width:340px;background:var(--sf);border:1px solid var(--bd);border-radius:10px;box-shadow:var(--sh2);overflow:hidden;max-height:calc(100vh - 80px);overflow-y:auto}
+#pop textarea{height:68px;min-height:68px;max-height:68px;resize:none;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.5;border:1px solid var(--bd);border-radius:6px;padding:7px 9px;background:var(--sf2);color:var(--tx);outline:none;width:100%}
+#pop textarea:focus{background:#fff;border-color:var(--ac)}
+/* MAIN */
+main{padding:16px 20px;max-width:1600px;position:relative;z-index:1}
+/* EMPTY */
+.empty{text-align:center;padding:80px 40px;color:var(--t2)}
+.empty-icon{font-size:40px;margin-bottom:12px;opacity:.4}
+.empty-title{font-weight:700;font-size:16px;color:var(--t3);margin-bottom:5px}
+.empty-hint{font-size:12px;color:var(--t3)}
+/* KPI */
+.ks{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:10px;margin-bottom:14px}
+.kc{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:13px 15px;box-shadow:var(--sh);position:relative;overflow:hidden;transition:transform .15s,box-shadow .15s}
+.kc:hover{transform:translateY(-2px);box-shadow:var(--sh2)}
+.kc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--kc,var(--ac))}
+.kc-ico{font-size:17px;margin-bottom:7px}
+.kc-lbl{font-size:9.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--t3);margin-bottom:5px}
+.kc-val{font-size:18px;font-weight:800;letter-spacing:-.8px;line-height:1;margin-bottom:4px;color:var(--kc,var(--tx))}
+.kc-sub{font-size:10.5px;color:var(--t2)}
+.pill{display:inline-flex;align-items:center;padding:2px 7px;border-radius:100px;font-size:10px;font-weight:700}
+.pg{background:var(--grl);color:var(--gr)}.pr{background:var(--rdl);color:var(--rd)}.pa{background:var(--aml);color:var(--am)}
+/* CHARTS */
+.cg2{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:11px}
+.cg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:11px;margin-bottom:11px}
+.full{grid-column:1/-1}
+.cc{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:13px 15px;box-shadow:var(--sh)}
+.ch{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;gap:6px;flex-wrap:wrap}
+.ct{font-weight:700;font-size:12.5px;color:var(--tx)}
+.cs{font-size:11px;color:var(--t3);margin-top:1px}
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:5px;font-size:10px;font-weight:700;background:var(--acl);color:var(--ac)}
+.cw{position:relative}.sm{height:190px}.md{height:235px}.lg{height:270px}.xl{height:310px}
+/* INSIGHTS */
+.ig{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:9px;margin-bottom:16px}
+.ic{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:11px 13px;display:flex;align-items:flex-start;gap:9px;box-shadow:var(--sh)}
+.ii{width:30px;height:30px;min-width:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px}
+.it{font-weight:700;font-size:11px;margin-bottom:2px}
+.iv{font-size:11px;color:var(--t2);line-height:1.35}
+/* TABLE */
+.mt{width:100%;border-collapse:collapse;font-size:11.5px}
+.mt th{padding:6px 10px;text-align:right;font-size:9.5px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--t3);border-bottom:1.5px solid var(--bd);background:var(--sf2)}
+.mt th:first-child{text-align:left}
+.mt td{padding:6px 10px;text-align:right;color:var(--t2);border-bottom:1px solid var(--t4);font-family:'JetBrains Mono',monospace;font-size:11px}
+.mt td:first-child{text-align:left;color:var(--tx);font-family:'Plus Jakarta Sans',sans-serif;font-size:12px}
+.mt tr:last-child td{border-bottom:none}
+.mt tr:hover td{background:var(--sf2)}
+td.pos{color:var(--gr)}td.neg{color:var(--rd)}
+/* REPORTS IN POPOVER */
+.rpt-row{display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--sf2);border:1px solid var(--bd);border-radius:6px;margin-bottom:5px;cursor:pointer;transition:all .15s}
+.rpt-row:hover{border-color:var(--ac)}.rpt-row.active{border-color:var(--ac);background:var(--acl)}
+.rpt-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.rpt-name{flex:1;font-weight:600;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rpt-meta{font-size:10.5px;color:var(--t3);white-space:nowrap}
+/* YEAR SELECTOR TABS */
+.ytabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.ytab{padding:5px 12px;border-radius:100px;font-size:11.5px;font-weight:600;cursor:pointer;border:1.5px solid var(--bd2);background:transparent;color:var(--t2);transition:all .15s;font-family:inherit}
+.ytab:hover{border-color:var(--ac);color:var(--ac)}
+.ytab.on{background:var(--ac);border-color:var(--ac);color:#fff}
+.ytab.compare{background:var(--pu);border-color:var(--pu);color:#fff}
+/* MISC */
+.dh{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;gap:12px;flex-wrap:wrap}
+.ptitle{font-weight:800;font-size:19px;letter-spacing:-.5px}
+.psub{font-size:11.5px;color:var(--t2);margin-top:2px}
+.hc{display:flex;gap:7px;align-items:center;flex-wrap:wrap}
+select.sel{padding:5px 9px;background:var(--sf);border:1px solid var(--bd2);border-radius:6px;font-family:inherit;font-size:12px;font-weight:600;color:var(--tx);cursor:pointer}
+.sec-head{font-weight:800;font-size:14px;margin:4px 0 11px;letter-spacing:-.3px}
+.copyright{text-align:center;padding:12px;font-size:10px;color:var(--t3);border-top:1px solid var(--bd);margin-top:14px}
+.toast{position:fixed;bottom:16px;right:16px;padding:9px 15px;background:var(--tx);color:#fff;border-radius:7px;font-family:inherit;font-weight:600;font-size:12px;z-index:9999;opacity:0;transform:translateY(12px);transition:all .22s;max-width:320px;box-shadow:var(--sh2)}
+.toast.show{opacity:1;transform:translateY(0)}.toast.s{background:var(--gr)}.toast.e{background:var(--rd)}.toast.i{background:var(--ac)}
+.fade{animation:fu .3s ease both}
+@keyframes fu{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:3px}
+.lbl-toggle{background:transparent;border:1px solid var(--bd2);border-radius:5px;cursor:pointer;font-size:12px;padding:2px 6px;transition:all .15s;line-height:1}
+.lbl-toggle:hover{background:var(--acl);border-color:var(--ac)}
+.lbl-toggle.on{background:var(--ac);border-color:var(--ac)}
+.pie-label-overlay{position:absolute;inset:0;pointer-events:none}
+@media(max-width:900px){.cg2,.cg3{grid-template-columns:1fr}.full{grid-column:1}header{padding:0 12px}main{padding:12px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <div class="brand-icon">LS</div>
+    <div class="brand-text">
+      <div class="bn">Lyca Finance Dashboard</div>
+      <div class="bt">LYCA SURVEYING ENGINEERING SERVICES LLC</div>
+    </div>
+  </div>
+  <div class="hdr-r">
+    <button class="btn btn-wh" onclick="togglePop()">📋 Paste Data</button>
+    <button class="btn btn-wh" id="b-backup" onclick="exportJSON()" style="display:none" title="Download JSON backup">💾 Backup</button>
+    <button class="btn btn-wh" onclick="importJSON()" title="Load from JSON backup">📂 Load</button>
+    <button class="btn btn-wh" id="b-pdf" onclick="exportPDF()" style="display:none">⬇ PDF</button>
+    <button class="btn btn-danger" id="b-clr" onclick="clearAll()" style="display:none">✕</button>
+  </div>
+</header>
+
+<div id="pop-bg" onclick="closePopover()"></div>
+<div id="pop">
+  <div style="padding:9px 13px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between">
+    <span style="font-weight:700;font-size:12.5px">Paste report data</span>
+    <button onclick="closePopover()" style="background:none;border:none;cursor:pointer;color:var(--t3);font-size:18px;line-height:1;padding:0 2px">×</button>
+  </div>
+  <div style="padding:10px 13px">
+    <textarea id="pa" placeholder="Paste clipboard data here…"></textarea>
+    <div style="display:flex;align-items:center;gap:7px;margin-top:7px">
+      <button class="btn btn-pr" style="flex:1;justify-content:center" onclick="doParse()">⚡ Import</button>
+      <button class="btn btn-gh btn-sm" onclick="document.getElementById('pa').value=''">Clear</button>
+      <span id="ph" style="font-size:10.5px;color:var(--t3)"></span>
+    </div>
+    <div id="rw" style="display:none;margin-top:9px;border-top:1px solid var(--bd);padding-top:9px">
+      <div style="font-size:9.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--t3);margin-bottom:6px">Loaded Reports — click to activate, ✕ to remove</div>
+      <div id="rl"></div>
+    </div>
+  </div>
+</div>
+
+<main>
+  <div id="d-empty" class="empty">
+    <div class="empty-icon">📊</div>
+    <div class="empty-title">No data loaded</div>
+    <div class="empty-hint">Click <strong>Paste Data</strong> in the top-right to import your first report</div>
+  </div>
+  <div id="d-data" style="display:none">
+    <!-- YEAR SELECTOR + VIEW CONTROLS -->
+    <div class="dh">
+      <div>
+        <div class="ptitle" id="d-title">Financial Dashboard</div>
+        <div class="psub" id="d-sub"></div>
+      </div>
+      <div class="hc">
+        <span style="font-size:11px;font-weight:600;color:var(--t3)">Period:</span>
+        <select class="sel" id="psel" onchange="renderDash()"><option value="all">Full Year</option></select>
+      </div>
+    </div>
+    <!-- YEAR TABS -->
+    <div id="ytabs-wrap" style="margin-bottom:12px">
+      <div class="ytabs" id="ytabs"></div>
+    </div>
+    <!-- KPI -->
+    <div class="ks" id="ks"></div>
+    <!-- TREND -->
+    <div style="margin-bottom:11px">
+      <div class="cc full">
+        <div class="ch"><div><div class="ct" id="c1-title">Monthly Revenue, Expenses &amp; Net Profit</div><div class="cs" id="c1-sub">Performance trend</div></div></div>
+        <div class="cw xl"><canvas id="c1"></canvas></div>
+      </div>
+    </div>
+    <!-- PIES -->
+    <div class="cg2">
+      <div class="cc">
+        <div class="ch"><div><div class="ct">Revenue by Service Type</div><div class="cs">Contribution breakdown</div></div><div style="display:flex;align-items:center;gap:6px"><span class="badge" id="rb">All</span><button class="lbl-toggle" id="lbl-c2" onclick="toggleLabels('c2')" title="Toggle labels">🏷</button></div></div>
+        <div class="cw md" style="position:relative"><canvas id="c2"></canvas></div>
+      </div>
+      <div class="cc">
+        <div class="ch"><div><div class="ct">Expense Distribution</div><div class="cs">Where costs are going</div></div><div style="display:flex;align-items:center;gap:6px"><span class="badge" id="eb">All</span><button class="lbl-toggle" id="lbl-c3" onclick="toggleLabels('c3')" title="Toggle labels">🏷</button></div></div>
+        <div class="cw md" style="position:relative"><canvas id="c3"></canvas></div>
+      </div>
+    </div>
+    <!-- MARGIN + CUMULATIVE -->
+    <div class="cg2">
+      <div class="cc">
+        <div class="ch"><div><div class="ct">Profit Margin % by Month</div><div class="cs">Net profit as % of revenue</div></div></div>
+        <div class="cw md"><canvas id="c4"></canvas></div>
+      </div>
+      <div class="cc">
+        <div class="ch"><div><div class="ct" id="c5-title">Cumulative Net Profit</div><div class="cs">Running total</div></div></div>
+        <div class="cw md"><canvas id="c5"></canvas></div>
+      </div>
+    </div>
+    <!-- REV BAR + EXPENSE CATEGORY BAR -->
+    <div class="cg2">
+      <div class="cc">
+        <div class="ch"><div><div class="ct">Top Revenue Streams</div><div class="cs">Ranked by total</div></div></div>
+        <div class="cw lg"><canvas id="c6"></canvas></div>
+      </div>
+      <div class="cc">
+        <div class="ch"><div><div class="ct">Expense by Category</div><div class="cs">Total cost per group</div></div></div>
+        <div class="cw lg"><canvas id="c7"></canvas></div>
+      </div>
+    </div>
+    <!-- MoM + NET PROFIT BAR + RATIO -->
+    <div class="cg3" id="single-only-row">
+      <div class="cc">
+        <div class="ch"><div><div class="ct">Month-over-Month Revenue</div><div class="cs">Change vs previous month</div></div></div>
+        <div class="cw md"><canvas id="c8"></canvas></div>
+      </div>
+      <div class="cc">
+        <div class="ch"><div><div class="ct">Net Profit per Month</div><div class="cs">Colour-coded performance</div></div></div>
+        <div class="cw md"><canvas id="c10"></canvas></div>
+      </div>
+      <div class="cc">
+        <div class="ch"><div><div class="ct">Revenue vs Expense Ratio</div><div class="cs">% balance per month</div></div></div>
+        <div class="cw md"><canvas id="c9"></canvas></div>
+      </div>
+    </div>
+    <!-- TABLES -->
+    <div class="cg2">
+      <div class="cc">
+        <div class="ch"><div><div class="ct">Top Revenue Services</div><div class="cs">Ranked by total value</div></div></div>
+        <div style="overflow-x:auto"><table class="mt" id="ttop"></table></div>
+      </div>
+      <div class="cc">
+        <div class="ch"><div><div class="ct">Top Expense Lines</div><div class="cs">Ranked by total cost</div></div></div>
+        <div style="overflow-x:auto"><table class="mt" id="texp"></table></div>
+      </div>
+    </div>
+    <!-- YEAR COMPARISON (shown only when compare mode) -->
+    <div id="compare-section" style="display:none">
+      <div class="sec-head">📅 Year-over-Year Comparison</div>
+      <div class="cg2">
+        <div class="cc">
+          <div class="ch"><div><div class="ct">Annual Revenue Comparison</div><div class="cs">Side by side by year</div></div></div>
+          <div class="cw lg"><canvas id="cy1"></canvas></div>
+        </div>
+        <div class="cc">
+          <div class="ch"><div><div class="ct">Annual Profit Comparison</div><div class="cs">Net profit by year</div></div></div>
+          <div class="cw lg"><canvas id="cy2"></canvas></div>
+        </div>
+      </div>
+      <div class="cg2">
+        <div class="cc">
+          <div class="ch"><div><div class="ct">Monthly Revenue — All Years</div><div class="cs">Overlaid trend lines</div></div></div>
+          <div class="cw lg"><canvas id="cy3"></canvas></div>
+        </div>
+        <div class="cc">
+          <div class="ch"><div><div class="ct">Profit Margin by Year</div><div class="cs">Annual margin %</div></div></div>
+          <div class="cw md"><canvas id="cy4"></canvas></div>
+        </div>
+      </div>
+    </div>
+    <!-- INSIGHTS -->
+    <div class="sec-head">🔍 Auto Insights</div>
+    <div class="ig" id="ig"></div>
+    <div class="copyright">© Lyca Surveying Engineering Services LLC. All rights reserved. | Confidential — Internal Use Only.</div>
+  </div>
+</main>
+<div class="toast" id="toast"></div>
+<!-- Hidden PDF canvases -->
+<div style="position:fixed;left:-9999px;top:0;pointer-events:none">
+  <canvas id="p1" width="1100" height="400"></canvas>
+  <canvas id="p2" width="600" height="400"></canvas>
+  <canvas id="p3" width="600" height="400"></canvas>
+  <canvas id="p4" width="600" height="400"></canvas>
+  <canvas id="p5" width="600" height="400"></canvas>
+  <canvas id="p6" width="600" height="400"></canvas>
+  <canvas id="p7" width="600" height="400"></canvas>
+  <canvas id="p8" width="1100" height="360"></canvas>
+  <canvas id="p9" width="600" height="360"></canvas>
+  <canvas id="p10" width="600" height="360"></canvas>
+</div>
+<script>
+// ═══ STATE ═══
+// S.reports = array of report objects, each has a unique year label
+// Active mode: single year view OR compare (all years)
+let S={reports:[],mode:'single',activeId:null};
+let CH={};
+
+const PCOLS=['#1e4db7','#15803d','#b45309','#c81c1c','#6d28d9','#0369a1','#be185d','#047857','#7c3aed','#c2410c','#0891b2','#065f46','#92400e','#1e40af'];
+const ECOLS=['#1e4db7','#c81c1c','#b45309','#15803d','#6d28d9','#0369a1','#be185d','#047857'];
+const YCOLS=['#1e4db7','#15803d','#b45309','#c81c1c','#6d28d9','#0369a1'];
+
+function loadSt(){
+  try{
+    const raw=localStorage.getItem('lyca_v7');
+    if(raw){
+      const saved=JSON.parse(raw);
+      S.reports=saved.reports||[];
+      S.mode=saved.mode||'single';
+      S.activeId=saved.activeId||null;
+      if(!S.activeId&&S.reports.length)S.activeId=S.reports[S.reports.length-1].id;
+    }
+  }catch(e){}
+}
+function saveSt(){
+  try{localStorage.setItem('lyca_v7',JSON.stringify({reports:S.reports,mode:S.mode,activeId:S.activeId}));}catch(e){}
+}
+
+// ═══ POPOVER ═══
+function togglePop(){const o=document.getElementById('pop').style.display==='block';o?closePopover():openPopover();}
+function openPopover(){document.getElementById('pop').style.display='block';document.getElementById('pop-bg').style.display='block';document.getElementById('pa').focus();}
+function closePopover(){document.getElementById('pop').style.display='none';document.getElementById('pop-bg').style.display='none';}
+
+// ═══ PARSER ═══
+function parseText(raw){
+  const lines=raw.replace(/\r\n/g,'\n').replace(/\r/g,'\n').split('\n');
+  const MON=/^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)-\d{2}$/i;
+  let headerMonths=[],headerIdx=-1;
+  for(let i=0;i<lines.length;i++){
+    const cols=lines[i].split('\t').map(c=>c.trim());
+    const mons=cols.filter(c=>MON.test(c));
+    if(mons.length>=2){headerMonths=mons;headerIdx=i;break;}
+  }
+  if(!headerMonths.length)throw new Error('No month headers found.');
+  const normMon=s=>s.replace(/([A-Za-z]+)-(\d{2,4})/i,(_,mo,yr)=>mo[0].toUpperCase()+mo.slice(1,3).toLowerCase()+'-'+(yr.length===4?yr.slice(2):yr));
+  const months=headerMonths.map(normMon);
+  const N=months.length;
+  function pv(s){if(!s||s.trim()==='-'||s.trim()==='')return 0;s=s.trim();const neg=s.startsWith('(')&&s.endsWith(')');const v=parseFloat(s.replace(/[(),$\s]/g,'').replace(/,/g,''));return isNaN(v)?0:(neg?-v:v);}
+  function extractVals(cols){const vals={};let done=false;const toks=[];for(const c of cols){if(!done){if(c&&!MON.test(c))done=true;continue;}toks.push(c);}months.forEach((m,i)=>{vals[m]=pv(toks[i]||'');});return vals;}
+  function rowLabel(cols){for(const c of cols){if(c&&!MON.test(c))return c;}return '';}
+  function hasValues(cols){let done=false,cnt=0;for(const c of cols){if(!done){if(c&&!MON.test(c))done=true;continue;}if(pv(c)!==0)return true;if(++cnt>=N)break;}return false;}
+  const report={id:Date.now(),title:'Lyca Surveying',period:'',months,rev:{},exp:{},totRev:{},totExp:{},netProfit:{}};
+  months.forEach(m=>{report.totRev[m]=0;report.totExp[m]=0;report.netProfit[m]=0;});
+  let section=null,subSec=null;
+  const SUB=new Set(['employee expenses','office expenses','outsourcement fee','vehicle expenses','tax and insurance','management staff']);
+  const TOTRE=/^total\s*[—–\-]/i;
+  const SKIP=/^(lyca surveying|20\d{2}|for the period|accrual basis)$/i;
+  for(let li=headerIdx+1;li<lines.length;li++){
+    const raw2=lines[li];if(!raw2.trim())continue;
+    const cols=raw2.split('\t').map(c=>c.trim());
+    const label=rowLabel(cols);if(!label||SKIP.test(label))continue;
+    const ll=label.toLowerCase().trim();
+    if(/for the period/i.test(label)&&!report.period){report.period=label;continue;}
+    if(/surveying services revenue/i.test(ll)){section='rev';subSec=null;continue;}
+    if(/^less[:\s]*expenses/i.test(ll)){section='exp';subSec=null;continue;}
+    if(SUB.has(ll)){subSec=label;continue;}
+    if(TOTRE.test(label)){
+      if(/surveying services/i.test(label)){report.totRev=extractVals(cols);subSec=null;}
+      else if(/^total\s*[—–\-]\s*expenses/i.test(label)){report.totExp=extractVals(cols);}
+      continue;
+    }
+    if(/net profit/i.test(ll)){report.netProfit=extractVals(cols);continue;}
+    if(!section||!hasValues(cols))continue;
+    const vals=extractVals(cols);
+    const key=subSec?subSec+' › '+label:label;
+    if(section==='rev')report.rev[key]=vals;
+    else if(section==='exp')report.exp[key]=vals;
+  }
+  if(months.every(m=>!report.totRev[m]))months.forEach(m=>report.totRev[m]=Object.values(report.rev).reduce((s,v)=>s+(v[m]||0),0));
+  if(months.every(m=>!report.totExp[m]))months.forEach(m=>report.totExp[m]=Object.values(report.exp).reduce((s,v)=>s+(v[m]||0),0));
+  if(months.every(m=>!report.netProfit[m]))months.forEach(m=>report.netProfit[m]=(report.totRev[m]||0)-(report.totExp[m]||0));
+  // Detect year label from period or months
+  const yearMatch=report.period.match(/20\d{2}/);
+  report.yearLabel=yearMatch?yearMatch[0]:(months[0]?months[0].slice(-2):'?');
+  return report;
+}
+
+// ═══ IMPORT ═══
+function doParse(){
+  const text=document.getElementById('pa').value.trim();
+  if(!text){showToast('Paste data first','e');return;}
+  const ph=document.getElementById('ph');ph.textContent='Parsing…';
+  setTimeout(()=>{
+    try{
+      const r=parseText(text);
+      const rc=Object.keys(r.rev).length,ec=Object.keys(r.exp).length;
+      if(!rc&&!ec)throw new Error('No data rows found.');
+      ph.textContent='';
+      // Replace report with same yearLabel if exists, otherwise add
+      const existing=S.reports.findIndex(x=>x.yearLabel===r.yearLabel);
+      if(existing>=0)S.reports[existing]=r;
+      else S.reports.push(r);
+      S.activeId=r.id;
+      S.mode='single';
+      saveSt();
+      document.getElementById('pa').value='';
+      refreshAll();
+      closePopover();
+      showToast(`✓ ${r.yearLabel}: ${rc} revenue + ${ec} expense rows`,'s');
+    }catch(err){ph.textContent='';showToast(err.message,'e');console.error(err);}
+  },30);
+}
+
+// ═══ HELPERS ═══
+function sh(id){document.getElementById(id).style.display='';}
+function hi(id){document.getElementById(id).style.display='none';}
+function aM(r){return r.months.filter(m=>(r.totRev[m]||0)>0||(r.totExp[m]||0)>0);}
+function getActive(){return S.reports.find(r=>r.id===S.activeId)||S.reports[0];}
+
+function refreshAll(){
+  const has=S.reports.length>0;
+  document.getElementById('b-pdf').style.display=has?'':'none';
+  document.getElementById('b-clr').style.display=has?'':'none';
+  const bkp=document.getElementById('b-backup');if(bkp)bkp.style.display=has?'':'none';
+  renderRptList();
+  if(has){
+    sh('d-data');hi('d-empty');
+    renderYearTabs();
+    buildPeriodSel();
+    renderDash();
+  }else{
+    hi('d-data');sh('d-empty');
+  }
+}
+
+function renderRptList(){
+  const el=document.getElementById('rl'),sec=document.getElementById('rw');
+  if(!S.reports.length){sec.style.display='none';return;}
+  sec.style.display='';
+  el.innerHTML=S.reports.map(r=>`
+    <div class="rpt-row ${S.activeId===r.id&&S.mode==='single'?'active':''}" onclick="activateYear(${r.id})">
+      <div class="rpt-dot" style="background:${YCOLS[S.reports.indexOf(r)%YCOLS.length]}"></div>
+      <div class="rpt-name">${r.yearLabel} — ${r.period||'Imported'}</div>
+      <div class="rpt-meta">${aM(r).length}mo</div>
+      <button class="btn btn-danger" onclick="event.stopPropagation();delReport(${r.id})">✕</button>
+    </div>`).join('');
+}
+
+function activateYear(id){
+  S.activeId=id;S.mode='single';saveSt();
+  closePopover();refreshAll();
+}
+
+function delReport(id){
+  S.reports=S.reports.filter(r=>r.id!==id);
+  if(S.activeId===id){
+    S.activeId=S.reports.length?S.reports[S.reports.length-1].id:null;
+    S.mode=S.reports.length?'single':'single';
+  }
+  saveSt();refreshAll();
+  showToast('Report removed','i');
+}
+
+function clearAll(){if(!confirm('Clear ALL reports?'))return;localStorage.removeItem('lyca_v7');location.reload();}
+
+function renderYearTabs(){
+  const el=document.getElementById('ytabs');
+  if(S.reports.length<=1){el.innerHTML='';return;}
+  let html=S.reports.map((r,i)=>`
+    <button class="ytab ${S.mode==='single'&&S.activeId===r.id?'on':''}" onclick="switchYear(${r.id})" style="${S.mode==='single'&&S.activeId===r.id?'':'border-color:'+YCOLS[i%YCOLS.length]+';color:'+YCOLS[i%YCOLS.length]}">
+      ${r.yearLabel}
+    </button>`).join('');
+  html+=`<button class="ytab ${S.mode==='compare'?'compare':''}" onclick="switchCompare()">⚖ Compare All</button>`;
+  el.innerHTML=html;
+}
+
+function switchYear(id){S.activeId=id;S.mode='single';saveSt();renderYearTabs();buildPeriodSel();renderDash();}
+function switchCompare(){S.mode='compare';saveSt();renderYearTabs();renderDash();}
+
+function buildPeriodSel(){
+  const r=getActive();if(!r)return;
+  const am=aM(r);
+  const sel=document.getElementById('psel');
+  sel.innerHTML=`<option value="all">Full Year</option>`+am.map(m=>`<option value="${m}">${m}</option>`).join('');
+}
+
+// ═══ RENDER DASHBOARD ═══
+function renderDash(){
+  if(S.mode==='compare')return renderCompare();
+  const r=getActive();if(!r)return;
+  const p=document.getElementById('psel').value;
+  const am=aM(r);
+  const ms=p==='all'?am:[p];
+  document.getElementById('d-title').textContent=r.yearLabel+' Financial Dashboard';
+  document.getElementById('d-sub').textContent=r.period||(am[0]+' — '+am[am.length-1]);
+  document.getElementById('rb').textContent=p==='all'?'All Months':p;
+  document.getElementById('eb').textContent=p==='all'?'All Months':p;
+  document.getElementById('c1-title').textContent='Monthly Revenue, Expenses & Net Profit';
+  document.getElementById('c1-sub').textContent='Performance trend';
+  document.getElementById('c5-title').textContent='Cumulative Net Profit';
+  hi('compare-section');
+  const _sor=document.getElementById('single-only-row');if(_sor)_sor.style.display='';
+
+  const tR=ms.reduce((s,m)=>s+(r.totRev[m]||0),0);
+  const tE=ms.reduce((s,m)=>s+(r.totExp[m]||0),0);
+  const nP=tR-tE,mg=tR>0?nP/tR*100:0;
+  const avgM=am.filter(m=>(r.totRev[m]||0)>0).reduce((s,m)=>s+((r.netProfit[m]||0)/(r.totRev[m]||1)*100),0)/Math.max(1,am.filter(m=>(r.totRev[m]||0)>0).length);
+  const bM=ms.reduce((b,m)=>(r.netProfit[m]||0)>(r.netProfit[b]||0)?m:b,ms[0]);
+
+  document.getElementById('ks').innerHTML=`
+    <div class="kc fade" style="--kc:var(--ac)"><div class="kc-ico">💰</div><div class="kc-lbl">Total Revenue</div><div class="kc-val" style="color:var(--ac)">AED ${fn(tR)}</div><div class="kc-sub">${p==='all'?am.length+' months':p}</div></div>
+    <div class="kc fade" style="--kc:var(--am)"><div class="kc-ico">📉</div><div class="kc-lbl">Total Expenses</div><div class="kc-val" style="color:var(--am)">AED ${fn(tE)}</div><div class="kc-sub">All categories</div></div>
+    <div class="kc fade" style="--kc:${nP>=0?'var(--gr)':'var(--rd)'}"><div class="kc-ico">${nP>=0?'📈':'📉'}</div><div class="kc-lbl">Net Profit</div><div class="kc-val" style="color:${nP>=0?'var(--gr)':'var(--rd)'}">AED ${fn(nP)}</div><div class="kc-sub"><span class="pill ${nP>=0?'pg':'pr'}">${nP>=0?'▲ Profitable':'▼ Loss'}</span></div></div>
+    <div class="kc fade" style="--kc:${mg>=20?'var(--gr)':mg>=10?'var(--am)':'var(--rd)'}"><div class="kc-ico">📊</div><div class="kc-lbl">Profit Margin</div><div class="kc-val" style="color:${mg>=20?'var(--gr)':mg>=10?'var(--am)':'var(--rd)'}">${mg.toFixed(1)}%</div><div class="kc-sub"><span class="pill ${mg>=20?'pg':mg>=10?'pa':'pr'}">${mg>=30?'Excellent':mg>=20?'Good':mg>=10?'Moderate':'Low'}</span></div></div>
+    <div class="kc fade" style="--kc:var(--pu)"><div class="kc-ico">🏆</div><div class="kc-lbl">Best Month</div><div class="kc-val" style="font-size:15px;color:var(--pu)">${bM}</div><div class="kc-sub">AED ${fn(r.netProfit[bM]||0)}</div></div>
+    <div class="kc fade" style="--kc:var(--cy)"><div class="kc-ico">📅</div><div class="kc-lbl">Avg Monthly Rev</div><div class="kc-val" style="font-size:15px;color:var(--cy)">AED ${fn(tR/ms.length)}</div><div class="kc-sub">Avg margin ${avgM.toFixed(1)}%</div></div>`;
+
+  doC1(r,p,am);doC2(r,p,am);doC3(r,p,am);doC4(r,p,am);doC5(r,p,am);doC6(r,p,am);doC7(r,p,am);doC8(r,p,am);doC9(r,p,am);doC10(r,p,am);doTopTable(r,p,am);doExpTable(r,p,am);doInsights(r,p,am,tR,tE,nP,mg);
+}
+
+// ═══ COMPARE MODE ═══
+function renderCompare(){
+  const rs=S.reports;if(!rs.length)return;
+  const selPeriod=document.getElementById('psel').value;
+  const isMonthFilter=selPeriod&&selPeriod!=='all';
+  // For each report, get the filtered month set
+  function rMs(r){
+    const am=aM(r);
+    if(!isMonthFilter)return am;
+    // Match on month name only (e.g. "Jan") so Jan-25 matches Jan-24 etc
+    const monName=selPeriod.slice(0,3);
+    const exact=am.filter(m=>m===selPeriod);
+    if(exact.length)return exact;
+    // Cross-year: match same month name
+    return am.filter(m=>m.slice(0,3)===monName);
+  }
+  document.getElementById('d-title').textContent=isMonthFilter?'Month Comparison — '+selPeriod:'Year-over-Year Comparison';
+  document.getElementById('d-sub').textContent=rs.map(r=>r.yearLabel).join(' vs ')+(isMonthFilter?' | '+selPeriod:'');
+  document.getElementById('rb').textContent=isMonthFilter?selPeriod:'All Years';
+  document.getElementById('eb').textContent=isMonthFilter?selPeriod:'All Years';
+  document.getElementById('c1-title').textContent=isMonthFilter?'Revenue Comparison — '+selPeriod+' across years':'Combined Monthly Revenue (All Years)';
+  document.getElementById('c1-sub').textContent=isMonthFilter?'Same month across all years':'All years overlaid';
+  document.getElementById('c5-title').textContent=isMonthFilter?'Profit Comparison — '+selPeriod:'Year-over-Year Annual Totals';
+  sh('compare-section');
+  {const sor=document.getElementById('single-only-row');if(sor)sor.style.display='none';}
+
+  // Constants for monthly overlay charts (always use full year range)
+  const _shortMons=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const _allMonLen=Math.max(...rs.map(r=>aM(r).length));
+  const _labels=_shortMons.slice(0,_allMonLen);
+
+  // KPIs — combined totals filtered by period
+  let totR=0,totE=0,totN=0;
+  rs.forEach(r=>{const ms=rMs(r);totR+=ms.reduce((s,m)=>s+(r.totRev[m]||0),0);totE+=ms.reduce((s,m)=>s+(r.totExp[m]||0),0);totN+=ms.reduce((s,m)=>s+(r.netProfit[m]||0),0);});
+  const combMg=totR>0?totN/totR*100:0;
+  document.getElementById('ks').innerHTML=`
+    <div class="kc fade" style="--kc:var(--ac)"><div class="kc-ico">💰</div><div class="kc-lbl">Combined Revenue</div><div class="kc-val" style="color:var(--ac)">AED ${fn(totR)}</div><div class="kc-sub">${rs.length} years</div></div>
+    <div class="kc fade" style="--kc:var(--am)"><div class="kc-ico">📉</div><div class="kc-lbl">Combined Expenses</div><div class="kc-val" style="color:var(--am)">AED ${fn(totE)}</div><div class="kc-sub">All years</div></div>
+    <div class="kc fade" style="--kc:${totN>=0?'var(--gr)':'var(--rd)'}"><div class="kc-ico">${totN>=0?'📈':'📉'}</div><div class="kc-lbl">Combined Profit</div><div class="kc-val" style="color:${totN>=0?'var(--gr)':'var(--rd)'}">AED ${fn(totN)}</div><div class="kc-sub"><span class="pill ${totN>=0?'pg':'pr'}">${totN>=0?'▲ Profitable':'▼ Loss'}</span></div></div>
+    <div class="kc fade" style="--kc:${combMg>=20?'var(--gr)':combMg>=10?'var(--am)':'var(--rd)'}"><div class="kc-ico">📊</div><div class="kc-lbl">Combined Margin</div><div class="kc-val" style="color:${combMg>=20?'var(--gr)':combMg>=10?'var(--am)':'var(--rd)'}">${combMg.toFixed(1)}%</div><div class="kc-sub">Across all years</div></div>
+    <div class="kc fade" style="--kc:var(--pu)"><div class="kc-ico">📋</div><div class="kc-lbl">Years Loaded</div><div class="kc-val" style="font-size:18px;color:var(--pu)">${rs.length}</div><div class="kc-sub">${rs.map(r=>r.yearLabel).join(', ')}</div></div>
+    <div class="kc fade" style="--kc:var(--cy)"><div class="kc-ico">📅</div><div class="kc-lbl">Avg Annual Rev</div><div class="kc-val" style="font-size:15px;color:var(--cy)">AED ${fn(totR/rs.length)}</div><div class="kc-sub">Per year</div></div>`;
+
+  // C1: month filter = bar per year; full year = overlapping lines
+  kd('c1');
+  if(isMonthFilter){
+    CH.c1=new Chart(document.getElementById('c1').getContext('2d'),{type:'bar',
+      data:{labels:rs.map(r=>r.yearLabel),datasets:[
+        {label:'Revenue',data:rs.map(r=>rMs(r).reduce((s,m)=>s+(r.totRev[m]||0),0)),backgroundColor:rs.map((_,i)=>YCOLS[i%YCOLS.length]+'cc'),borderRadius:5},
+        {label:'Expenses',data:rs.map(r=>rMs(r).reduce((s,m)=>s+(r.totExp[m]||0),0)),backgroundColor:rs.map((_,i)=>ECOLS[i%ECOLS.length]+'99'),borderRadius:5},
+        {label:'Net Profit',data:rs.map(r=>rMs(r).reduce((s,m)=>s+(r.netProfit[m]||0),0)),backgroundColor:rs.map(r=>{const n=rMs(r).reduce((s,m)=>s+(r.netProfit[m]||0),0);return n>=0?'rgba(21,128,61,.75)':'rgba(200,28,28,.75)';}),borderRadius:5}
+      ]},
+      options:{...cO('AED'),scales:{x:axS(),y:{...axS(),ticks:{...axS().ticks,callback:v=>fk(v)}}}}});
+  } else {
+    CH.c1=new Chart(document.getElementById('c1').getContext('2d'),{type:'line',
+      data:{labels:_labels,datasets:rs.map((r,i)=>{const am=aM(r);return{label:r.yearLabel+' Revenue',data:am.slice(0,_allMonLen).map(m=>r.totRev[m]||0),borderColor:YCOLS[i%YCOLS.length],backgroundColor:YCOLS[i%YCOLS.length]+'18',borderWidth:2.5,pointRadius:4,fill:false,tension:.35};})},
+      options:cO('AED')});
+  }
+
+  // C2: combined revenue pie
+  const revMap={};rs.forEach(r=>{const am=rMs(r);Object.entries(r.rev).forEach(([k,v])=>{const lbl=k.replace(/.*› /,'');revMap[lbl]=(revMap[lbl]||0)+am.reduce((s,m)=>s+(v[m]||0),0);});});
+  const rc=Object.entries(revMap).filter(([,v])=>v>0).sort((a,b)=>b[1]-a[1]);
+  const rcTot=rc.reduce((s,[,v])=>s+v,0);
+  kd('c2');CH.c2=makePie('c2',rc.map(([k])=>k),rc.map(([,v])=>v),PCOLS,rcTot,false);
+  // C3: combined expense pie
+  const expMap={};rs.forEach(r=>{const am=rMs(r);Object.entries(r.exp).forEach(([k,v])=>{const g=k.includes(' › ')?k.split(' › ')[0]:'General';expMap[g]=(expMap[g]||0)+am.reduce((s,m)=>s+(v[m]||0),0);});});
+  const ec=Object.entries(expMap).filter(([,v])=>v>0).sort((a,b)=>b[1]-a[1]);
+  const ecTot=ec.reduce((s,[,v])=>s+v,0);
+  kd('c3');CH.c3=makePie('c3',ec.map(([k])=>k),ec.map(([,v])=>v),ECOLS,ecTot,false);
+  // C4: profit margin % per year (bar)
+  kd('c4');CH.c4=new Chart(document.getElementById('c4').getContext('2d'),{type:'bar',
+    data:{labels:rs.map(r=>r.yearLabel),datasets:[{label:'Annual Margin %',data:rs.map(r=>{const am=rMs(r);const tR=am.reduce((s,m)=>s+(r.totRev[m]||0),0);const tN=am.reduce((s,m)=>s+(r.netProfit[m]||0),0);return tR>0?(tN/tR*100):0;}),backgroundColor:rs.map((_,i)=>YCOLS[i%YCOLS.length]+'cc'),borderRadius:5}]},
+    options:{...cO('%'),scales:{x:axS(),y:{...axS(),ticks:{...axS().ticks,callback:v=>v.toFixed(0)+'%'}}}}});
+
+  // C5: annual totals grouped bar
+  kd('c5');CH.c5=new Chart(document.getElementById('c5').getContext('2d'),{type:'bar',
+    data:{labels:rs.map(r=>r.yearLabel),datasets:[
+      {label:'Revenue',data:rs.map(r=>{const am=rMs(r);return am.reduce((s,m)=>s+(r.totRev[m]||0),0);}),backgroundColor:'rgba(30,77,183,.7)',borderRadius:4},
+      {label:'Expenses',data:rs.map(r=>{const am=rMs(r);return am.reduce((s,m)=>s+(r.totExp[m]||0),0);}),backgroundColor:'rgba(180,83,9,.65)',borderRadius:4},
+      {label:'Net Profit',data:rs.map(r=>{const am=rMs(r);return am.reduce((s,m)=>s+(r.netProfit[m]||0),0);}),backgroundColor:rs.map(r=>{const am=rMs(r);const n=am.reduce((s,m)=>s+(r.netProfit[m]||0),0);return n>=0?'rgba(21,128,61,.75)':'rgba(200,28,28,.75)';}),borderRadius:4}
+    ]},
+    options:{...cO('AED'),scales:{x:axS(),y:{...axS(),ticks:{...axS().ticks,callback:v=>fk(v)}}}}});
+
+  // C6: revenue by year stacked
+  kd('c6');CH.c6=new Chart(document.getElementById('c6').getContext('2d'),{type:'bar',
+    data:{labels:rs.map(r=>r.yearLabel),datasets:[{label:'Revenue',data:rs.map(r=>{const am=rMs(r);return am.reduce((s,m)=>s+(r.totRev[m]||0),0);}),backgroundColor:rs.map((_,i)=>YCOLS[i%YCOLS.length]+'cc'),borderRadius:4}]},
+    options:{...cO('AED'),scales:{x:axS(),y:{...axS(),ticks:{...axS().ticks,callback:v=>fk(v)}}}}});
+
+  // C7: expenses by year
+  kd('c7');CH.c7=new Chart(document.getElementById('c7').getContext('2d'),{type:'bar',
+    data:{labels:rs.map(r=>r.yearLabel),datasets:[{label:'Expenses',data:rs.map(r=>{const am=rMs(r);return am.reduce((s,m)=>s+(r.totExp[m]||0),0);}),backgroundColor:rs.map((_,i)=>ECOLS[i%ECOLS.length]+'cc'),borderRadius:4}]},
+    options:{...cO('AED'),scales:{x:axS(),y:{...axS(),ticks:{...axS().ticks,callback:v=>fk(v)}}}}});
+
+  // C8 hidden in compare, clear
+  kd('c8');kd('c9');kd('c10');
+
+  // Compare year charts
+  kd('cy1');CH.cy1=new Chart(document.getElementById('cy1').getContext('2d'),{type:'bar',
+    data:{labels:rs.map(r=>r.yearLabel),datasets:[{label:'Annual Revenue',data:rs.map(r=>{const am=rMs(r);return am.reduce((s,m)=>s+(r.totRev[m]||0),0);}),backgroundColor:rs.map((_,i)=>YCOLS[i%YCOLS.length]+'cc'),borderRadius:5}]},
+    options:{...cO('AED'),scales:{x:axS(),y:{...axS(),ticks:{...axS().ticks,callback:v=>fk(v)}}}}});
+
+  kd('cy2');CH.cy2=new Chart(document.getElementById('cy2').getContext('2d'),{type:'bar',
+    data:{labels:rs.map(r=>r.yearLabel),datasets:[{label:'Net Profit',data:rs.map(r=>{const am=rMs(r);return am.reduce((s,m)=>s+(r.netProfit[m]||0),0);}),backgroundColor:rs.map(r=>{const am=rMs(r);const n=am.reduce((s,m)=>s+(r.netProfit[m]||0),0);return n>=0?'rgba(21,128,61,.75)':'rgba(200,28,28,.75)';}),borderRadius:5}]},
+    options:{...cO('AED'),scales:{x:axS(),y:{...axS(),ticks:{...axS().ticks,callback:v=>fk(v)}}}}});
+
+  kd('cy3');CH.cy3=new Chart(document.getElementById('cy3').getContext('2d'),{type:'line',
+    data:{labels:_labels,datasets:rs.map((r,i)=>{const am=aM(r);return{label:r.yearLabel,data:am.slice(0,_allMonLen).map(m=>r.totRev[m]||0),borderColor:YCOLS[i%YCOLS.length],borderWidth:2.5,pointRadius:4,fill:false,tension:.35};})},
+    options:{...cO('AED'),scales:{x:axS(),y:{...axS(),ticks:{...axS().ticks,callback:v=>fk(v)}}}}});
+
+  kd('cy4');CH.cy4=new Chart(document.getElementById('cy4').getContext('2d'),{type:'bar',
+    data:{labels:rs.map(r=>r.yearLabel),datasets:[{label:'Annual Margin %',data:rs.map(r=>{const am=rMs(r);const tR=am.reduce((s,m)=>s+(r.totRev[m]||0),0);const tN=am.reduce((s,m)=>s+(r.netProfit[m]||0),0);return tR>0?(tN/tR*100):0;}),backgroundColor:rs.map((_,i)=>YCOLS[i%YCOLS.length]+'cc'),borderRadius:4}]},
+    options:{...cO('%'),scales:{x:axS(),y:{...axS(),ticks:{...axS().ticks,callback:v=>v.toFixed(0)+'%'}}}}});
+
+  // Combined top revenue table
+  const revArr=Object.entries(revMap).map(([k,v])=>({k,v})).sort((a,b)=>b.v-a.v).slice(0,10);
+  let h=`<thead><tr><th>Service</th><th>AED</th><th>Share</th></tr></thead><tbody>`;
+  revArr.forEach(c=>{const pct=(c.v/rcTot*100).toFixed(1);h+=`<tr><td>${c.k}</td><td class="pos">${fn(c.v)}</td><td><div style="display:flex;align-items:center;gap:5px"><div style="width:${Math.round(parseFloat(pct))}px;max-width:65px;height:4px;background:var(--ac);border-radius:2px"></div><span style="font-size:10px">${pct}%</span></div></td></tr>`;});
+  document.getElementById('ttop').innerHTML=h+'</tbody>';
+
+  const expArr=Object.entries(expMap).map(([k,v])=>({k,v})).sort((a,b)=>b.v-a.v).slice(0,10);
+  let h2=`<thead><tr><th>Category</th><th>AED</th><th>Share</th></tr></thead><tbody>`;
+  expArr.forEach(c=>{const pct=(c.v/ecTot*100).toFixed(1);h2+=`<tr><td>${c.k}</td><td class="neg">${fn(c.v)}</td><td><div style="display:flex;align-items:center;gap:5px"><div style="width:${Math.round(parseFloat(pct))}px;max-width:65px;height:4px;background:var(--rd);border-radius:2px"></div><span style="font-size:10px">${pct}%</span></div></td></tr>`;});
+  document.getElementById('texp').innerHTML=h2+'</tbody>';
+
+  // Insights for compare
+  const bestY=rs.reduce((b,r)=>{const am=rMs(r);const n=am.reduce((s,m)=>s+(r.netProfit[m]||0),0);const bn=rMs(b).reduce((s,m)=>s+(b.netProfit[m]||0),0);return n>bn?r:b;},rs[0]);
+  const worstY=rs.reduce((w,r)=>{const am=rMs(r);const n=am.reduce((s,m)=>s+(r.netProfit[m]||0),0);const wn=rMs(w).reduce((s,m)=>s+(w.netProfit[m]||0),0);return n<wn?r:w;},rs[0]);
+  let yGrowth=null;if(rs.length>1){const y1=rMs(rs[0]).reduce((s,m)=>s+(rs[0].totRev[m]||0),0);const yL=rMs(rs[rs.length-1]).reduce((s,m)=>s+(rs[rs.length-1].totRev[m]||0),0);yGrowth=y1>0?(yL-y1)/y1*100:null;}
+  const ins2=[
+    {icon:'🏆',bg:'#dbeafe',t:'Best Performing Year',v:`${bestY.yearLabel}: AED ${fn(rMs(bestY).reduce((s,m)=>s+(bestY.netProfit[m]||0),0))} net profit`},
+    {icon:'⚠️',bg:'#fee2e2',t:'Lowest Performing Year',v:`${worstY.yearLabel}: AED ${fn(rMs(worstY).reduce((s,m)=>s+(worstY.netProfit[m]||0),0))} net profit`},
+    {icon:'💰',bg:'#dcfce7',t:'Combined Revenue',v:`AED ${fn(totR)} across ${rs.length} years`},
+    {icon:'🔥',bg:'#fef3c7',t:'Combined Expenses',v:`AED ${fn(totE)} total spent`},
+    {icon:'📊',bg:'#ede9fe',t:'Combined Net Profit',v:`AED ${fn(totN)} — margin ${combMg.toFixed(1)}%`},
+    yGrowth!==null?{icon:'🚀',bg:'#dbeafe',t:'Revenue Growth',v:`${rs[0].yearLabel}→${rs[rs.length-1].yearLabel}: ${yGrowth>=0?'+':''}${yGrowth.toFixed(1)}%`}:null,
+    {icon:'💼',bg:'#fef3c7',t:'Overall Combined Margin',v:`${combMg.toFixed(1)}% — ${combMg>=30?'Excellent':combMg>=20?'Good':combMg>=10?'Moderate':'Below target'}`}
+  ].filter(Boolean);
+  document.getElementById('ig').innerHTML=ins2.map(i=>`
+    <div class="ic fade"><div class="ii" style="background:${i.bg}">${i.icon}</div>
+    <div><div class="it">${i.t}</div><div class="iv">${i.v}</div></div></div>`).join('');
+}
+
+// ═══ SINGLE YEAR CHARTS ═══
+function doC1(r,p,am){kd('c1');const ms=p==='all'?am:[p];
+  CH.c1=new Chart(document.getElementById('c1').getContext('2d'),{
+    data:{labels:ms,datasets:[
+      {type:'bar',label:'Revenue',data:ms.map(m=>r.totRev[m]||0),backgroundColor:'rgba(30,77,183,.65)',borderRadius:4,order:2},
+      {type:'bar',label:'Expenses',data:ms.map(m=>r.totExp[m]||0),backgroundColor:'rgba(180,83,9,.55)',borderRadius:4,order:2},
+      {type:'line',label:'Net Profit',data:ms.map(m=>r.netProfit[m]||(r.totRev[m]||0)-(r.totExp[m]||0)),borderColor:'#15803d',backgroundColor:'rgba(21,128,61,.07)',borderWidth:2.5,pointRadius:5,pointBackgroundColor:'#15803d',fill:true,tension:.35,order:1}
+    ]},options:cO('AED')});}
+
+function doC2(r,p,am){
+  const cats=Object.entries(r.rev).map(([k,v])=>({k:k.replace(/.*› /,''),v:p==='all'?am.reduce((s,m)=>s+(v[m]||0),0):(v[p]||0)})).filter(c=>c.v>0).sort((a,b)=>b.v-a.v);
+  const tot=cats.reduce((s,c)=>s+c.v,0);
+  const showLbl=document.getElementById('lbl-c2')?.classList.contains('on');
+  CH.c2=makePie('c2',cats.map(c=>c.k),cats.map(c=>c.v),PCOLS,tot,showLbl);}
+
+function doC3(r,p,am){
+  const grps={};for(const[k,v]of Object.entries(r.exp)){const g=k.includes(' › ')?k.split(' › ')[0]:'General';grps[g]=(grps[g]||0)+(p==='all'?am.reduce((s,m)=>s+(v[m]||0),0):(v[p]||0));}
+  const ent=Object.entries(grps).filter(([,v])=>v>0).sort((a,b)=>b[1]-a[1]);
+  const tot=ent.reduce((s,[,v])=>s+v,0);
+  const showLbl=document.getElementById('lbl-c3')?.classList.contains('on');
+  CH.c3=makePie('c3',ent.map(([k])=>k),ent.map(([,v])=>v),ECOLS,tot,showLbl);}
+
+function doC4(r,p,am){kd('c4');const ms=p==='all'?am:[p];
+  const mg=ms.map(m=>{const rv=r.totRev[m]||0;return rv>0?((r.netProfit[m]||0)/rv*100):0;});
+  CH.c4=new Chart(document.getElementById('c4').getContext('2d'),{type:'bar',
+    data:{labels:ms,datasets:[{label:'Margin %',data:mg,backgroundColor:mg.map(v=>v>=20?'rgba(21,128,61,.75)':v>=0?'rgba(180,83,9,.7)':'rgba(200,28,28,.75)'),borderRadius:4}]},
+    options:{...cO('%'),scales:{x:axS(),y:{...axS(),ticks:{...axS().ticks,callback:v=>v.toFixed(0)+'%'}}}}});}
+
+function doC5(r,p,am){kd('c5');const ms=p==='all'?am:[p];let cum=0;const cd=ms.map(m=>{cum+=(r.netProfit[m]||0);return cum;});
+  CH.c5=new Chart(document.getElementById('c5').getContext('2d'),{type:'line',
+    data:{labels:ms,datasets:[{label:'Cumulative Profit',data:cd,borderColor:'#1e4db7',backgroundColor:'rgba(30,77,183,.08)',borderWidth:2.5,pointRadius:4,pointBackgroundColor:cd.map(v=>v>=0?'#1e4db7':'#c81c1c'),fill:true,tension:.3}]},
+    options:{...cO('AED'),scales:{x:axS(),y:{...axS(),ticks:{...axS().ticks,callback:v=>fk(v)}}}}});}
+
+function doC6(r,p,am){kd('c6');
+  const cats=Object.entries(r.rev).map(([k,v])=>({k:k.replace(/.*› /,''),v:p==='all'?am.reduce((s,m)=>s+(v[m]||0),0):(v[p]||0)})).filter(c=>c.v>0).sort((a,b)=>b.v-a.v).slice(0,12);
+  CH.c6=new Chart(document.getElementById('c6').getContext('2d'),{type:'bar',
+    data:{labels:cats.map(c=>c.k.length>24?c.k.slice(0,22)+'…':c.k),datasets:[{label:'AED',data:cats.map(c=>c.v),backgroundColor:cats.map((_,i)=>`hsla(${220+i*13},65%,${45+i*2}%,.82)`),borderRadius:4}]},
+    options:{...cO('AED'),indexAxis:'y',plugins:{...cO('AED').plugins,tooltip:{backgroundColor:'#fff',borderColor:'#dde3ee',borderWidth:1,titleColor:'#0d1b3e',bodyColor:'#3d5070',callbacks:{label:ctx=>' AED '+fn(ctx.parsed.x||0)}}},scales:{x:{...axS(),ticks:{...axS().ticks,callback:v=>fk(v)}},y:axS()}}});}
+
+function doC7(r,p,am){kd('c7');const ms=p==='all'?am:[p];
+  const grps={};for(const[k,v]of Object.entries(r.exp)){const g=k.includes(' › ')?k.split(' › ')[0]:'General';grps[g]=(grps[g]||0)+ms.reduce((s,m)=>s+(v[m]||0),0);}
+  const ent=Object.entries(grps).filter(([,v])=>v>0).sort((a,b)=>b[1]-a[1]);
+  CH.c7=new Chart(document.getElementById('c7').getContext('2d'),{type:'bar',
+    data:{labels:ent.map(([k])=>k),datasets:[{label:'Expenses (AED)',data:ent.map(([,v])=>v),backgroundColor:ECOLS.slice(0,ent.length).map(c=>c+'dd'),borderRadius:5}]},
+    options:{...cO('AED'),indexAxis:'y',plugins:{...cO('AED').plugins,legend:{display:false},tooltip:{backgroundColor:'#fff',borderColor:'#dde3ee',borderWidth:1,titleColor:'#0d1b3e',bodyColor:'#3d5070',callbacks:{label:ctx=>' AED '+fn(ctx.parsed.x||0)}}},scales:{x:{...axS(),ticks:{...axS().ticks,callback:v=>fk(v)}},y:axS()}}});}
+
+function doC8(r,p,am){kd('c8');const ms=p==='all'?am:[p];
+  const ch=ms.map((m,i)=>{if(i===0)return 0;const prev=r.totRev[ms[i-1]]||1;return((r.totRev[m]||0)-prev)/prev*100;});
+  CH.c8=new Chart(document.getElementById('c8').getContext('2d'),{type:'bar',
+    data:{labels:ms,datasets:[{label:'Revenue Change %',data:ch,backgroundColor:ch.map(v=>v>=0?'rgba(21,128,61,.72)':'rgba(200,28,28,.72)'),borderRadius:4}]},
+    options:{...cO('%'),scales:{x:axS(),y:{...axS(),ticks:{...axS().ticks,callback:v=>v.toFixed(0)+'%'}}}}});}
+
+function doC9(r,p,am){kd('c9');const ms=p==='all'?am:[p];
+  const revP=ms.map(m=>{const rv=r.totRev[m]||0,ex=r.totExp[m]||0,tot=rv+ex;return tot>0?(rv/tot*100):50;});
+  const expP=ms.map(m=>{const rv=r.totRev[m]||0,ex=r.totExp[m]||0,tot=rv+ex;return tot>0?(ex/tot*100):50;});
+  CH.c9=new Chart(document.getElementById('c9').getContext('2d'),{type:'bar',
+    data:{labels:ms,datasets:[{label:'Revenue %',data:revP,backgroundColor:'rgba(30,77,183,.7)',borderRadius:3},{label:'Expense %',data:expP,backgroundColor:'rgba(180,83,9,.65)',borderRadius:3}]},
+    options:{...cO('%'),scales:{x:{...axS(),stacked:true},y:{...axS(),stacked:true,max:100,ticks:{...axS().ticks,callback:v=>v+'%'}}}}});}
+
+function doC10(r,p,am){kd('c10');const ms=p==='all'?am:[p];
+  const vals=ms.map(m=>r.netProfit[m]||(r.totRev[m]||0)-(r.totExp[m]||0));
+  CH.c10=new Chart(document.getElementById('c10').getContext('2d'),{type:'bar',
+    data:{labels:ms,datasets:[{label:'Net Profit (AED)',data:vals,backgroundColor:vals.map(v=>v>=0?'rgba(21,128,61,.75)':'rgba(200,28,28,.75)'),borderRadius:4}]},
+    options:{...cO('AED'),scales:{x:axS(),y:{...axS(),ticks:{...axS().ticks,callback:v=>fk(v)}}}}});}
+
+function doTopTable(r,p,am){
+  const cats=Object.entries(r.rev).map(([k,v])=>({k:k.replace(/.*› /,''),v:p==='all'?am.reduce((s,m)=>s+(v[m]||0),0):(v[p]||0)})).filter(c=>c.v>0).sort((a,b)=>b.v-a.v).slice(0,10);
+  const tot=cats.reduce((s,c)=>s+c.v,0);
+  let h=`<thead><tr><th>Service</th><th>AED</th><th>Share</th></tr></thead><tbody>`;
+  cats.forEach(c=>{const pct=(c.v/tot*100).toFixed(1);h+=`<tr><td>${c.k}</td><td class="pos">${fn(c.v)}</td><td><div style="display:flex;align-items:center;gap:5px"><div style="width:${Math.round(parseFloat(pct))}px;max-width:65px;height:4px;background:var(--ac);border-radius:2px"></div><span style="font-size:10px">${pct}%</span></div></td></tr>`;});
+  document.getElementById('ttop').innerHTML=h+'</tbody>';}
+
+function doExpTable(r,p,am){
+  const cats=Object.entries(r.exp).map(([k,v])=>({k:k.replace(/.*› /,''),v:p==='all'?am.reduce((s,m)=>s+(v[m]||0),0):(v[p]||0)})).filter(c=>c.v>0).sort((a,b)=>b.v-a.v).slice(0,10);
+  const tot=cats.reduce((s,c)=>s+c.v,0);
+  let h=`<thead><tr><th>Category</th><th>AED</th><th>Share</th></tr></thead><tbody>`;
+  cats.forEach(c=>{const pct=(c.v/tot*100).toFixed(1);h+=`<tr><td>${c.k}</td><td class="neg">${fn(c.v)}</td><td><div style="display:flex;align-items:center;gap:5px"><div style="width:${Math.round(parseFloat(pct))}px;max-width:65px;height:4px;background:var(--rd);border-radius:2px"></div><span style="font-size:10px">${pct}%</span></div></td></tr>`;});
+  document.getElementById('texp').innerHTML=h+'</tbody>';}
+
+function doInsights(r,p,am,tR,tE,nP,mg){
+  const ms=p==='all'?am:[p];
+  const bM=ms.reduce((b,m)=>(r.netProfit[m]||0)>(r.netProfit[b]||0)?m:b,ms[0]);
+  const wM=ms.reduce((w,m)=>(r.netProfit[m]||0)<(r.netProfit[w]||0)?m:w,ms[0]);
+  const tRv=Object.entries(r.rev).map(([k,v])=>({k:k.replace(/.*› /,''),v:ms.reduce((s,m)=>s+(v[m]||0),0)})).sort((a,b)=>b.v-a.v)[0];
+  const tEx=Object.entries(r.exp).map(([k,v])=>({k:k.replace(/.*› /,''),v:ms.reduce((s,m)=>s+(v[m]||0),0)})).sort((a,b)=>b.v-a.v)[0];
+  const lM=ms.filter(m=>(r.netProfit[m]||0)<0);
+  const hg=ms.reduce((b,m,i)=>{if(i===0)return b;const prev=r.totRev[ms[i-1]]||1;const g=((r.totRev[m]||0)-prev)/prev*100;return g>b.g?{m,g}:b;},{m:'',g:-9999});
+  const ins=[
+    {icon:'🏆',bg:'#dbeafe',t:'Best Profit Month',v:`${bM}: AED ${fn(r.netProfit[bM]||0)}`},
+    {icon:'⚠️',bg:'#fee2e2',t:'Lowest Profit Month',v:`${wM}: AED ${fn(r.netProfit[wM]||0)}`},
+    tRv?{icon:'💰',bg:'#dcfce7',t:'Top Revenue Service',v:`${tRv.k}: AED ${fn(tRv.v)}`}:null,
+    tEx?{icon:'🔥',bg:'#fef3c7',t:'Highest Expense Category',v:`${tEx.k}: AED ${fn(tEx.v)}`}:null,
+    {icon:'📊',bg:'#ede9fe',t:'Avg Monthly Revenue',v:`AED ${fn(tR/ms.length)}`},
+    {icon:'⚖️',bg:'#e0f2fe',t:'Expense-to-Revenue Ratio',v:`${tR>0?(tE/tR*100).toFixed(1):0}% of revenue`},
+    lM.length?{icon:'🚨',bg:'#fee2e2',t:'Loss Months',v:`${lM.length}: ${lM.join(', ')}`}:{icon:'✅',bg:'#dcfce7',t:'All Periods Profitable',v:'No loss months recorded'},
+    hg.m?{icon:'🚀',bg:'#dbeafe',t:'Highest Revenue Growth',v:`${hg.m}: +${hg.g.toFixed(1)}% vs prior`}:null,
+    {icon:'💼',bg:'#fef3c7',t:'Profit Margin',v:`${mg.toFixed(1)}% — ${mg>=30?'Excellent':mg>=20?'Good':mg>=10?'Moderate':'Below target'}`},
+    {icon:'📈',bg:'#dcfce7',t:'Revenue vs Expense Gap',v:`AED ${fn(nP)} net ${nP>=0?'surplus':'deficit'}`}
+  ].filter(Boolean);
+  document.getElementById('ig').innerHTML=ins.map(i=>`
+    <div class="ic fade"><div class="ii" style="background:${i.bg}">${i.icon}</div>
+    <div><div class="it">${i.t}</div><div class="iv">${i.v}</div></div></div>`).join('');}
+
+// ═══ PDF EXPORT — captures CURRENT live charts ═══
+async function exportPDF(){
+  if(!S.reports.length)return;
+  showToast('⏳ Building PDF…','i');
+  const{jsPDF}=window.jspdf;
+  const doc=new jsPDF({orientation:'landscape',unit:'mm',format:'a4'});
+  const W=297,H=210;
+  const isCompare=S.mode==='compare';
+  const r=isCompare?null:getActive();
+  const am=r?aM(r):[];
+
+  const hdr=(d,sub)=>{
+    d.setFillColor(30,77,183);d.rect(0,0,W,16,'F');d.setFillColor(26,62,153);d.rect(0,14,W,2,'F');
+    d.setFontSize(10.5);d.setTextColor(255,255,255);d.setFont('helvetica','bold');
+    d.text('Lyca Surveying Engineering Services LLC — '+sub,10,10);
+    d.setFontSize(7.5);d.setFont('helvetica','normal');d.setTextColor(180,200,240);
+    const yr=isCompare?S.reports.map(x=>x.yearLabel).join(' vs '):(r?.period||r?.yearLabel||'');
+    d.text(yr,10,14.5);
+    d.text('Generated '+new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}),W-10,14.5,{align:'right'});
+  };
+  const ftr=d=>{
+    d.setFillColor(30,77,183);d.rect(0,H-7,W,7,'F');
+    d.setFontSize(6.5);d.setTextColor(180,200,240);d.setFont('helvetica','normal');
+    d.text('© Lyca Surveying Engineering Services LLC. Confidential — Internal Use Only.',10,H-2);
+    // LYCA text watermark
+    d.saveGraphicsState();
+    d.setGState(new d.GState({opacity:0.04}));
+    d.setFontSize(80);d.setTextColor(30,77,183);d.setFont('helvetica','bold');
+    d.text('LYCA',W/2,H/2+15,{align:'center'});
+    d.restoreGraphicsState();
+  };
+  const sHd=(d,t,x,y,c)=>{d.setFillColor(...c);d.rect(x,y,70,.7,'F');d.setFontSize(7);d.setTextColor(...c);d.setFont('helvetica','bold');d.text(t,x,y-1.5);};
+
+  // Capture LIVE canvas screenshots from the DOM
+  function capChart(canvasId){
+    const cv=document.getElementById(canvasId);
+    if(!cv||cv.width===0)return null;
+    try{return cv.toDataURL('image/png');}catch(e){return null;}
+  }
+
+  // KPI data
+  let tR=0,tE=0,nP=0,mg=0;
+  if(isCompare){
+    S.reports.forEach(x=>{const a=aM(x);tR+=a.reduce((s,m)=>s+(x.totRev[m]||0),0);tE+=a.reduce((s,m)=>s+(x.totExp[m]||0),0);});
+    nP=tR-tE;mg=tR>0?nP/tR*100:0;
+  }else{
+    const p=document.getElementById('psel').value;const ms=p==='all'?am:[p];
+    tR=ms.reduce((s,m)=>s+(r.totRev[m]||0),0);tE=ms.reduce((s,m)=>s+(r.totExp[m]||0),0);nP=tR-tE;mg=tR>0?nP/tR*100:0;
+  }
+
+  // PAGE 1: KPIs + main trend
+  hdr(doc,isCompare?'Year-over-Year Comparison':'Financial Dashboard '+(r?.yearLabel||''));
+  [{l:'TOTAL REVENUE',v:'AED '+fn(tR),c:[30,77,183],bg:[232,239,255]},
+   {l:'TOTAL EXPENSES',v:'AED '+fn(tE),c:[180,83,9],bg:[254,243,199]},
+   {l:'NET PROFIT',v:'AED '+fn(nP),c:nP>=0?[21,128,61]:[200,28,28],bg:nP>=0?[220,252,231]:[254,226,226]},
+   {l:'PROFIT MARGIN',v:mg.toFixed(1)+'%',c:[109,40,217],bg:[237,233,254]},
+   {l:isCompare?'YEARS LOADED':'MONTHS',v:isCompare?S.reports.length+' years':(am.length+' months'),c:[3,105,161],bg:[224,242,254]}
+  ].forEach((k,i)=>{
+    const x=10+i*57;doc.setFillColor(...k.bg);doc.roundedRect(x,20,53,20,2,2,'F');
+    doc.setFillColor(...k.c);doc.rect(x,20,53,2,'F');
+    doc.setFontSize(6);doc.setTextColor(...k.c);doc.setFont('helvetica','bold');doc.text(k.l,x+3,26);
+    doc.setFontSize(10.5);doc.text(k.v,x+3,36);
+  });
+  sHd(doc,isCompare?'MONTHLY REVENUE — ALL YEARS':'MONTHLY REVENUE, EXPENSES & NET PROFIT',10,50,[30,77,183]);
+  const img1=capChart('c1');if(img1)doc.addImage(img1,'PNG',10,52,277,75);
+  ftr(doc);
+
+  // PAGE 2: Revenue pie + Expense pie + Margin + Cumulative
+  doc.addPage();hdr(doc,'Revenue Mix & Expense Distribution');
+  sHd(doc,'REVENUE BY SERVICE TYPE',10,28,[30,77,183]);const img2=capChart('c2');if(img2)doc.addImage(img2,'PNG',10,30,136,90);
+  sHd(doc,'EXPENSE DISTRIBUTION',153,28,[200,28,28]);const img3=capChart('c3');if(img3)doc.addImage(img3,'PNG',153,30,136,90);
+  sHd(doc,'PROFIT MARGIN',10,128,[21,128,61]);const img4=capChart('c4');if(img4)doc.addImage(img4,'PNG',10,130,136,62);
+  sHd(doc,isCompare?'ANNUAL TOTALS':'CUMULATIVE NET PROFIT',153,128,[30,77,183]);const img5=capChart('c5');if(img5)doc.addImage(img5,'PNG',153,130,136,62);
+  ftr(doc);
+
+  // PAGE 3: Revenue streams + Expense categories + MoM
+  doc.addPage();hdr(doc,'Revenue Streams & Expense Breakdown');
+  sHd(doc,'TOP REVENUE STREAMS',10,28,[30,77,183]);const img6=capChart('c6');if(img6)doc.addImage(img6,'PNG',10,30,136,90);
+  sHd(doc,'EXPENSE BY CATEGORY',153,28,[180,83,9]);const img7=capChart('c7');if(img7)doc.addImage(img7,'PNG',153,30,136,90);
+  if(!isCompare){
+    sHd(doc,'MONTH-OVER-MONTH CHANGE',10,128,[21,128,61]);const img8=capChart('c8');if(img8)doc.addImage(img8,'PNG',10,130,90,62);
+    sHd(doc,'NET PROFIT PER MONTH',107,128,[21,128,61]);const img10=capChart('c10');if(img10)doc.addImage(img10,'PNG',107,130,90,62);
+    sHd(doc,'REVENUE VS EXPENSE RATIO',204,128,[30,77,183]);const img9=capChart('c9');if(img9)doc.addImage(img9,'PNG',204,130,83,62);
+  }
+  ftr(doc);
+
+  // PAGE 4 (compare only): YoY charts
+  if(isCompare){
+    doc.addPage();hdr(doc,'Year-over-Year Analysis');
+    sHd(doc,'ANNUAL REVENUE COMPARISON',10,28,[30,77,183]);const icy1=capChart('cy1');if(icy1)doc.addImage(icy1,'PNG',10,30,136,88);
+    sHd(doc,'ANNUAL PROFIT COMPARISON',153,28,[21,128,61]);const icy2=capChart('cy2');if(icy2)doc.addImage(icy2,'PNG',153,30,136,88);
+    sHd(doc,'MONTHLY REVENUE ALL YEARS',10,128,[30,77,183]);const icy3=capChart('cy3');if(icy3)doc.addImage(icy3,'PNG',10,130,136,62);
+    sHd(doc,'PROFIT MARGIN BY YEAR',153,128,[109,40,217]);const icy4=capChart('cy4');if(icy4)doc.addImage(icy4,'PNG',153,130,136,62);
+    ftr(doc);
+  }
+
+  // Insights page
+  doc.addPage();hdr(doc,'Key Insights & Summary');
+  const insEls=document.getElementById('ig').querySelectorAll('.ic');
+  const insData=[];insEls.forEach(el=>{insData.push({t:el.querySelector('.it')?.textContent||'',v:el.querySelector('.iv')?.textContent||''});});
+  const insCols=[[30,77,183],[200,28,28],[21,128,61],[180,83,9],[3,105,161],[109,40,217],[200,28,28],[21,128,61],[180,83,9],[30,77,183]];
+  insData.slice(0,10).forEach((ins,i)=>{
+    const col=i%2===0?10:152,iy=20+Math.floor(i/2)*34;
+    doc.setFillColor(255,255,255);doc.roundedRect(col,iy,133,30,2,2,'F');
+    doc.setFillColor(...(insCols[i]||[30,77,183]));doc.rect(col,iy,133,2,'F');
+    doc.setFontSize(6.5);doc.setTextColor(...(insCols[i]||[30,77,183]));doc.setFont('helvetica','bold');doc.text(ins.t.toUpperCase(),col+4,iy+8);
+    doc.setFontSize(9.5);doc.setTextColor(13,27,62);doc.setFont('helvetica','normal');doc.text((ins.v||'').substring(0,48),col+4,iy+20);
+  });
+  ftr(doc);
+
+  const fname=(isCompare?'Lyca_Comparison':'Lyca_'+( r?.yearLabel||'Report'))+'_Dashboard.pdf';
+  doc.save(fname);
+  showToast('✓ PDF downloaded','s');
+}
+
+
+// ─ Donut outside labels ─
+const _lblState={c2:false,c3:false};
+function toggleLabels(id){
+  _lblState[id]=!_lblState[id];
+  const btn=document.getElementById('lbl-'+id);
+  if(btn){btn.classList.toggle('on',_lblState[id]);btn.textContent=_lblState[id]?'🏷 On':'🏷';}
+  if(S.mode==='compare'){renderCompare();return;}
+  const r=getActive();if(!r)return;
+  const p=document.getElementById('psel').value;
+  const am=aM(r);
+  if(id==='c2')doC2(r,p,am);
+  if(id==='c3')doC3(r,p,am);
+}
+
+function drawOutsideLabels(canvasId, cats, tot, colors){
+  requestAnimationFrame(()=>{
+    const canvas=document.getElementById(canvasId);
+    if(!canvas)return;
+    const chart=CH[canvasId];
+    if(!chart||!chart.data.datasets[0])return;
+    const ctx=canvas.getContext('2d');
+    const meta=chart.getDatasetMeta(0);
+    if(!meta||!meta.data||!meta.data.length)return;
+    const cx=chart.chartArea?(chart.chartArea.left+chart.chartArea.right)/2:canvas.width/2;
+    const cy=chart.chartArea?(chart.chartArea.top+chart.chartArea.bottom)/2:canvas.height/2;
+    const outerR=meta.data[0]?meta.data[0].outerRadius:80;
+    ctx.save();
+    ctx.font='600 10px Plus Jakarta Sans,sans-serif';
+    ctx.textBaseline='middle';
+    meta.data.forEach((arc,i)=>{
+      const cat=cats[i];if(!cat||cat.v<=0)return;
+      const pct=(cat.v/tot*100);
+      if(pct<2)return; // skip tiny slices
+      const midAngle=(arc.startAngle+arc.endAngle)/2;
+      const labelR=outerR+22;
+      const lineR=outerR+5;
+      const lx=cx+Math.cos(midAngle)*labelR;
+      const ly=cy+Math.sin(midAngle)*labelR;
+      const lx0=cx+Math.cos(midAngle)*lineR;
+      const ly0=cy+Math.sin(midAngle)*lineR;
+      // Arrow line
+      ctx.beginPath();
+      ctx.moveTo(lx0,ly0);
+      ctx.lineTo(lx,ly);
+      ctx.strokeStyle=colors[i%colors.length]||'#666';
+      ctx.lineWidth=1.2;
+      ctx.stroke();
+      // Dot at segment
+      ctx.beginPath();ctx.arc(lx0,ly0,2.5,0,Math.PI*2);
+      ctx.fillStyle=colors[i%colors.length]||'#666';ctx.fill();
+      // Text
+      const isRight=lx>cx;
+      ctx.textAlign=isRight?'left':'right';
+      const shortName=cat.k.length>14?cat.k.slice(0,13)+'…':cat.k;
+      ctx.fillStyle='#0d1b3e';
+      ctx.fillText(shortName,lx+(isRight?4:-4),ly-7);
+      ctx.fillStyle=colors[i%colors.length]||'#666';
+      ctx.font='700 9.5px Plus Jakarta Sans,sans-serif';
+      ctx.fillText(pct.toFixed(1)+'%  AED '+fn(cat.v),lx+(isRight?4:-4),ly+5);
+      ctx.font='600 10px Plus Jakarta Sans,sans-serif';
+    });
+    ctx.restore();
+  });
+}
+
+
+// ─── makePie: unified pie/doughnut with built-in segment labels ───
+function makePie(canvasId, labels, data, colors, tot, showSegLabels){
+  kd(canvasId);
+  const bgColors = colors.slice(0, labels.length).map((c,i) => c.length > 7 ? c : c);
+  // Register a one-time afterDraw plugin for this chart instance
+  const segLabelPlugin = {
+    id: 'segLabels_'+canvasId,
+    afterDraw(chart){
+      if(!showSegLabels) return;
+      const ctx2 = chart.ctx;
+      const meta = chart.getDatasetMeta(0);
+      if(!meta || !meta.data || !meta.data.length) return;
+      ctx2.save();
+      meta.data.forEach((arc, i) => {
+        const val = data[i];
+        if(!val || val<=0) return;
+        const pct = (val/tot*100);
+        if(pct < 3) return; // skip tiny slices
+        const midAngle = (arc.startAngle + arc.endAngle) / 2;
+        const r = (arc.innerRadius + arc.outerRadius) / 2;
+        const x = arc.x + Math.cos(midAngle) * r;
+        const y = arc.y + Math.sin(midAngle) * r;
+        ctx2.font = 'bold 10px Plus Jakarta Sans,sans-serif';
+        ctx2.textAlign = 'center';
+        ctx2.textBaseline = 'middle';
+        ctx2.fillStyle = '#fff';
+        ctx2.fillText(pct.toFixed(1)+'%', x, y);
+      });
+      ctx2.restore();
+    }
+  };
+  return new Chart(document.getElementById(canvasId).getContext('2d'), {
+    type: 'doughnut',
+    data: {
+      labels: labels,
+      datasets: [{data, backgroundColor: bgColors, borderColor:'#fff', borderWidth: 2.5}]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, cutout: showSegLabels ? '45%' : '52%',
+      layout: {padding: {right:8, left:4, top:4, bottom:4}},
+      plugins: {
+        legend: {
+          position: (showSegLabels && labels.length <= 7) ? 'bottom' : 'right',
+          labels: {
+            color:'#3d5070', boxWidth:9, padding: showSegLabels?6:5,
+            font:{family:'Plus Jakarta Sans', size: showSegLabels?9:9.5},
+            generateLabels: ch => {
+              const ds = ch.data.datasets[0];
+              return ch.data.labels.map((lbl,i) => ({
+                text: lbl + ' ' + (data[i]/tot*100).toFixed(1) + '% — AED '+fn(data[i]),
+                fillStyle: ds.backgroundColor[i],
+                strokeStyle:'#fff', lineWidth:1, hidden:false, index:i
+              }));
+            }
+          }
+        },
+        tooltip: {
+          backgroundColor:'#fff', borderColor:'#dde3ee', borderWidth:1,
+          titleColor:'#0d1b3e', bodyColor:'#3d5070',
+          callbacks: {
+            label: ctx => ' '+labels[ctx.dataIndex]+': AED '+fn(ctx.parsed)+' ('+(ctx.parsed/tot*100).toFixed(1)+'%)'
+          }
+        }
+      }
+    },
+    plugins: [segLabelPlugin]
+  });
+}
+
+// ─── JSON Backup / Restore ───
+function exportJSON(){
+  if(!S.reports.length){showToast('No data to export','e');return;}
+  const blob = new Blob([JSON.stringify({reports:S.reports,version:'lyca_v7'},null,2)],{type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'lyca_dashboard_backup_'+new Date().toISOString().slice(0,10)+'.json';
+  a.click(); URL.revokeObjectURL(a.href);
+  showToast('✓ Backup downloaded','s');
+}
+
+function importJSON(){
+  const input = document.createElement('input');
+  input.type='file'; input.accept='.json';
+  input.onchange = e => {
+    const file = e.target.files[0]; if(!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      try{
+        const data = JSON.parse(ev.target.result);
+        if(!data.reports || !Array.isArray(data.reports)) throw new Error('Invalid backup file');
+        // Merge: add reports not already present by yearLabel
+        let added=0;
+        data.reports.forEach(r => {
+          if(!S.reports.find(x=>x.yearLabel===r.yearLabel)){
+            S.reports.push(r); added++;
+          }
+        });
+        if(added===0){showToast('All reports already loaded','i');return;}
+        S.activeId = S.reports[S.reports.length-1].id;
+        S.mode='single';
+        saveSt(); refreshAll();
+        showToast('✓ Loaded '+added+' report(s) from backup','s');
+      }catch(err){showToast('Error: '+err.message,'e');}
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+}
+
+// ═══ CHART HELPERS ═══
+function kd(id){if(CH[id]){CH[id].destroy();delete CH[id];}}
+function axS(){return{grid:{color:'rgba(200,215,235,.55)',borderColor:'transparent'},ticks:{color:'#7a8fa8',font:{family:'Plus Jakarta Sans',size:10.5}},border:{color:'transparent'}};}
+function cO(u){return{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+  plugins:{legend:{labels:{color:'#3d5070',font:{family:'Plus Jakarta Sans',size:10.5},boxWidth:10}},
+    tooltip:{backgroundColor:'#fff',borderColor:'#dde3ee',borderWidth:1,titleColor:'#0d1b3e',bodyColor:'#3d5070',
+      callbacks:{label:ctx=>' '+ctx.dataset.label+': '+(u==='%'?ctx.parsed.y?.toFixed(1)+'%':'AED '+fn(ctx.parsed.y??ctx.parsed))}}},
+  scales:{x:axS(),y:{...axS(),ticks:{...axS().ticks,callback:v=>u==='%'?v.toFixed(0)+'%':fk(v)}}}};}
+function fn(n){if(isNaN(n))return'0';return n.toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0});}
+function fk(n){if(Math.abs(n)>=1e6)return(n/1e6).toFixed(1)+'M';if(Math.abs(n)>=1000)return(n/1000).toFixed(0)+'K';return n;}
+let _tt;
+function showToast(msg,t='i'){const el=document.getElementById('toast');el.textContent=msg;el.className='toast show '+t;clearTimeout(_tt);_tt=setTimeout(()=>el.classList.remove('show'),3200);}
+
+// INIT
+loadSt();
+if(S.reports.length){
+  sh('d-data');hi('d-empty');
+  document.getElementById('b-pdf').style.display='';
+  document.getElementById('b-clr').style.display='';
+  const _bkp=document.getElementById('b-backup');if(_bkp)_bkp.style.display='';
+  renderYearTabs();buildPeriodSel();renderRptList();renderDash();
+}
+</script>
+</body>
+</html>
