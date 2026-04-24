@@ -356,7 +356,11 @@ function parseText(raw){
     if(SUB.has(ll)){subSec=label;continue;}
     if(TOTRE.test(label)){
       if(/surveying services/i.test(label)){report.totRev=extractVals(cols);subSec=null;}
-      else if(/^total\s*[—–\-]\s*expenses/i.test(label)){report.totExp=extractVals(cols);}
+      else if(/^total\s*[—–\-]\s*expenses/i.test(label)){
+        const te=extractVals(cols);
+        // Expenses may be stored as negative in source (e.g. '- 91,921.90') — normalise to positive
+        months.forEach(m=>{report.totExp[m]=Math.abs(te[m]||0);});
+      }
       continue;
     }
     if(/net profit/i.test(ll)){report.netProfit=extractVals(cols);continue;}
@@ -364,7 +368,11 @@ function parseText(raw){
     const vals=extractVals(cols);
     const key=subSec?subSec+' › '+label:label;
     if(section==='rev')report.rev[key]=vals;
-    else if(section==='exp')report.exp[key]=vals;
+    else if(section==='exp'){
+      // Normalise expense line items to positive values
+      months.forEach(m=>{vals[m]=Math.abs(vals[m]||0);});
+      report.exp[key]=vals;
+    }
   }
   if(months.every(m=>!report.totRev[m]))months.forEach(m=>report.totRev[m]=Object.values(report.rev).reduce((s,v)=>s+(v[m]||0),0));
   if(months.every(m=>!report.totExp[m]))months.forEach(m=>report.totExp[m]=Object.values(report.exp).reduce((s,v)=>s+(v[m]||0),0));
