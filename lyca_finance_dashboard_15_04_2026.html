@@ -1167,38 +1167,45 @@ function drawOutsideLabels(canvasId, cats, tot, colors){
 
 // ─── makePie: unified pie/doughnut with built-in segment labels ───
 // ── Global segment label plugin for donut/pie charts ──
+// Use a Map to store per-chart label config (Chart.js v4 strips unknown options)
+const _pieSegMap = new Map();
 Chart.register({
   id: 'pieSegmentLabels',
-  afterDraw(chart) {
-    const opts = chart.options._segLabels;
+  afterRender(chart) {
+    const opts = _pieSegMap.get(chart);
     if (!opts || !opts.show) return;
-    const {data, tot, colors} = opts;
     const ctx2 = chart.ctx;
     const meta = chart.getDatasetMeta(0);
     if (!meta || !meta.data || !meta.data.length) return;
     ctx2.save();
-    meta.data.forEach((arc, i) => {
-      const val = data[i];
+    meta.data.forEach((arc, idx) => {
+      const val = opts.data[idx];
       if (!val || val <= 0) return;
-      const pct = (val / tot * 100);
-      if (pct < 4) return; // skip slices too small to label
+      const pct = (val / opts.tot * 100);
+      if (pct < 4) return;
       const midAngle = (arc.startAngle + arc.endAngle) / 2;
       const innerR = arc.innerRadius || 0;
       const outerR = arc.outerRadius || 80;
-      const r = innerR + (outerR - innerR) * 0.55; // slightly toward outer edge
-      const x = arc.x + Math.cos(midAngle) * r;
-      const y = arc.y + Math.sin(midAngle) * r;
-      // Draw shadow for readability
+      const labelR = innerR + (outerR - innerR) * 0.58;
+      const x = arc.x + Math.cos(midAngle) * labelR;
+      const y = arc.y + Math.sin(midAngle) * labelR;
       ctx2.font = 'bold 9.5px Plus Jakarta Sans,sans-serif';
       ctx2.textAlign = 'center';
       ctx2.textBaseline = 'middle';
-      ctx2.shadowColor = 'rgba(0,0,0,0.4)';
+      ctx2.shadowColor = 'rgba(0,0,0,0.45)';
       ctx2.shadowBlur = 3;
       ctx2.fillStyle = '#fff';
       ctx2.fillText(pct.toFixed(1) + '%', x, y);
       ctx2.shadowBlur = 0;
     });
     ctx2.restore();
+  },
+  afterUpdate(chart) {
+    // Re-fire afterRender logic on updates (e.g. resize, toggle)
+    const opts = _pieSegMap.get(chart);
+    if (!opts || !opts.show) return;
+    // Use setTimeout to ensure canvas is flushed
+    setTimeout(() => { if(chart && chart.ctx) chart.draw(); }, 0);
   }
 });
 
@@ -1206,7 +1213,8 @@ Chart.register({
 function makePie(canvasId, labels, data, colors, tot, showSegLabels){
   kd(canvasId);
   const bgColors = colors.slice(0, labels.length);
-  return new Chart(document.getElementById(canvasId).getContext('2d'), {
+  const _cv = document.getElementById(canvasId);
+  const _ch = new Chart(_cv.getContext('2d'), {
     type: 'doughnut',
     data: {
       labels: labels,
@@ -1214,8 +1222,8 @@ function makePie(canvasId, labels, data, colors, tot, showSegLabels){
     },
     options: {
       responsive: true, maintainAspectRatio: false, cutout: showSegLabels ? '42%' : '52%',
+      animation: {duration: 400},
       layout: {padding: {right:6, left:6, top:6, bottom:6}},
-      _segLabels: {show: showSegLabels, data: data, tot: tot, colors: bgColors},
       plugins: {
         legend: {
           position: (showSegLabels && labels.length <= 7) ? 'bottom' : 'right',
@@ -1248,6 +1256,8 @@ function makePie(canvasId, labels, data, colors, tot, showSegLabels){
       }
     },
   });
+  _pieSegMap.set(_ch, {show: showSegLabels, data: data, tot: tot});
+  return _ch;
 }
 
 // ─── JSON Backup / Restore ───
@@ -2170,6 +2180,10 @@ function exportProjectionsPDF() {
   const annuals = buildHistoricalAnnuals();
   if (!annuals.length) { showToast('No data for projections PDF', 'e'); return; }
   showToast('⏳ Building Projections PDF…', 'i');
+  // Pre-render all tab content so PDF can capture it
+  renderActionPlan();
+  renderCompanySummary();
+  renderProjInsightsTab();
   try{
   const {jsPDF} = window.jspdf;
   const doc = new jsPDF({orientation:'landscape', unit:'mm', format:'a4'});
@@ -2385,6 +2399,8 @@ function exportProjectionsPDF() {
     brs.forEach(function(br){ const t=document.createTextNode('\n'); br.parentNode.insertBefore(t,br); br.parentNode.removeChild(br); });
     return (clone.innerText || clone.textContent || '').trim();
   };
+  const prequalEl2 = document.getElementById('prequal-text');
+  const investorEl2 = document.getElementById('investor-text');
   if (prequalEl2) pdfTextBlock('Company Profile — Prequalification', getCleanText(prequalEl2), [30,77,183]);
   if (investorEl2) pdfTextBlock('Investor Briefing Note', getCleanText(investorEl2), [21,128,61]);
   ftr(doc);
