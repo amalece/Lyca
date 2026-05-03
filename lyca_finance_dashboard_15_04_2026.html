@@ -115,6 +115,124 @@ select.sel{padding:5px 9px;background:var(--sf);border:1px solid var(--bd2);bord
 .lbl-toggle.on{background:var(--ac);border-color:var(--ac)}
 .pie-label-overlay{position:absolute;inset:0;pointer-events:none}
 @media(max-width:900px){.cg2,.cg3{grid-template-columns:1fr}.full{grid-column:1}header{padding:0 12px}main{padding:12px}}
+
+/* ═══ PAGE NAV TABS ═══ */
+.page-nav{display:flex;gap:0;background:rgba(255,255,255,.12);border-radius:7px;padding:2px;margin-right:4px}
+.page-tab{padding:4px 14px;border-radius:5px;font-size:11.5px;font-weight:700;cursor:pointer;border:none;background:transparent;color:rgba(255,255,255,.7);font-family:inherit;transition:all .15s;letter-spacing:.1px}
+.page-tab.active{background:#fff;color:var(--ac)}
+/* ═══ PROJECTIONS PANEL ═══ */
+#proj-panel{display:none;padding:16px 20px;max-width:1600px;position:relative;z-index:1}
+.proj-empty{text-align:center;padding:80px 40px}
+.proj-empty-icon{font-size:40px;opacity:.35;margin-bottom:12px}
+.proj-empty-title{font-weight:700;font-size:16px;color:var(--t3);margin-bottom:6px}
+.proj-empty-hint{font-size:12px;color:var(--t3)}
+.proj-controls{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.proj-title{font-weight:800;font-size:19px;letter-spacing:-.5px}
+.proj-sub{font-size:11.5px;color:var(--t2);margin-top:2px}
+.proj-ctrl-group{display:flex;align-items:center;gap:6px;background:var(--sf);border:1px solid var(--bd);border-radius:8px;padding:6px 10px}
+.proj-ctrl-label{font-size:10.5px;font-weight:700;color:var(--t3);white-space:nowrap}
+.proj-select{padding:4px 8px;background:transparent;border:none;font-family:inherit;font-size:12px;font-weight:600;color:var(--tx);cursor:pointer;outline:none}
+/* Scenario cards */
+.scenario-bar{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.sc-card{border-radius:10px;padding:14px 16px;border:2px solid transparent;cursor:pointer;transition:all .18s;position:relative;overflow:hidden}
+.sc-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--sc-color)}
+.sc-card.selected{border-color:var(--sc-color);box-shadow:0 0 0 3px color-mix(in srgb,var(--sc-color) 15%,transparent)}
+.sc-card.bear{--sc-color:#c81c1c;background:linear-gradient(135deg,#fff5f5,#fff)}
+.sc-card.base{--sc-color:#1e4db7;background:linear-gradient(135deg,#f0f4ff,#fff)}
+.sc-card.bull{--sc-color:#15803d;background:linear-gradient(135deg,#f0fdf4,#fff)}
+.sc-name{font-weight:800;font-size:13px;margin-bottom:3px}
+.sc-desc{font-size:10.5px;color:var(--t2);margin-bottom:10px}
+.sc-stat{display:flex;justify-content:space-between;font-size:11px;margin-top:4px}
+.sc-stat span:first-child{color:var(--t3)}
+.sc-stat span:last-child{font-weight:700}
+/* Projection KPIs */
+.proj-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:10px;margin-bottom:14px}
+.proj-kc{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:13px 15px;box-shadow:var(--sh);position:relative;overflow:hidden}
+.proj-kc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--pkc,#1e4db7)}
+.proj-kc-lbl{font-size:9.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--t3);margin-bottom:5px}
+.proj-kc-val{font-size:17px;font-weight:800;letter-spacing:-.6px;color:var(--pkc,var(--tx));margin-bottom:3px}
+.proj-kc-sub{font-size:10.5px;color:var(--t2)}
+.proj-kc-change{font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;display:inline-block;margin-top:3px}
+.proj-kc-change.up{background:var(--grl);color:var(--gr)}
+.proj-kc-change.dn{background:var(--rdl);color:var(--rd)}
+/* Horizon table */
+.horizon-table{width:100%;border-collapse:collapse;font-size:12px}
+.horizon-table th{padding:8px 12px;font-size:9.5px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--t3);border-bottom:2px solid var(--bd);background:var(--sf2);text-align:right}
+.horizon-table th:first-child{text-align:left}
+.horizon-table td{padding:8px 12px;border-bottom:1px solid var(--t4);text-align:right;font-family:'JetBrains Mono',monospace;font-size:11px}
+.horizon-table td:first-child{text-align:left;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:12px;color:var(--tx)}
+.horizon-table tr:last-child td{border-bottom:none;font-weight:800;background:var(--acl)}
+.horizon-table tr:hover td{background:var(--sf2)}
+.proj-badge{padding:2px 7px;border-radius:5px;font-size:9.5px;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif}
+.proj-badge.bear{background:#fee2e2;color:#c81c1c}
+.proj-badge.base{background:#e8effe;color:#1e4db7}
+.proj-badge.bull{background:#dcfce7;color:#15803d}
+/* Insight cards for projections */
+.proj-insight{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:12px 14px;display:flex;gap:10px;box-shadow:var(--sh)}
+.proj-insight-icon{width:34px;height:34px;min-width:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px}
+.proj-insight-title{font-weight:700;font-size:11.5px;margin-bottom:3px}
+.proj-insight-body{font-size:11px;color:var(--t2);line-height:1.45}
+.proj-insight-body strong{color:var(--tx)}
+/* Risk meter */
+.risk-meter{height:8px;border-radius:4px;background:var(--bd);overflow:hidden;margin-top:5px}
+.risk-fill{height:100%;border-radius:4px;transition:width .4s ease}
+/* Warning banner */
+.proj-warn{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:10px 14px;font-size:11px;color:#92400e;margin-bottom:12px;display:flex;gap:8px;align-items:center}
+
+
+/* ─── Projection v2 additions ─── */
+.proj-tabs{display:flex;gap:0;border-bottom:2px solid var(--bd);margin-bottom:16px}
+.proj-tab-btn{padding:8px 18px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;border:none;background:transparent;color:var(--t3);border-bottom:2.5px solid transparent;margin-bottom:-2px;transition:all .15s}
+.proj-tab-btn.active{color:var(--ac);border-bottom-color:var(--ac)}
+.proj-tab-btn:hover:not(.active){color:var(--t2)}
+.proj-tab-pane{display:none}.proj-tab-pane.active{display:block}
+.data-notice{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:10px 14px;font-size:11.5px;color:#92400e;margin-bottom:12px;display:flex;gap:8px;align-items:flex-start}
+.action-step{display:flex;gap:12px;padding:12px 14px;background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);box-shadow:var(--sh);margin-bottom:8px}
+.action-step-num{width:26px;height:26px;min-width:26px;border-radius:50%;background:var(--ac);color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.action-step-body{flex:1}
+.action-step-title{font-weight:700;font-size:12px;margin-bottom:3px}
+.action-step-desc{font-size:11px;color:var(--t2);line-height:1.5}
+.action-step-badge{display:inline-block;padding:1px 7px;border-radius:10px;font-size:9.5px;font-weight:700;margin-left:6px}
+.badge-high{background:#fee2e2;color:#c81c1c}
+.badge-med{background:#fef3c7;color:#b45309}
+.badge-low{background:#dcfce7;color:#15803d}
+.company-summary-box{background:linear-gradient(135deg,#f0f4ff 0%,#fff 100%);border:1.5px solid var(--bd2);border-radius:12px;padding:24px 28px;margin-bottom:12px;position:relative;overflow:hidden}
+.company-summary-box::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#1e4db7,#6d28d9,#0369a1)}
+.cs-label{font-size:9.5px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--t3);margin-bottom:4px}
+.cs-title{font-size:20px;font-weight:800;color:var(--tx);margin-bottom:6px;letter-spacing:-.5px}
+.cs-body{font-size:12.5px;color:var(--t2);line-height:1.75;margin-bottom:12px}
+.cs-stat-row{display:flex;gap:20px;flex-wrap:wrap;margin-bottom:12px}
+.cs-stat{text-align:center}.cs-stat-val{font-size:17px;font-weight:800;color:var(--ac)}.cs-stat-lbl{font-size:10px;color:var(--t3)}
+.copy-btn{padding:6px 14px;background:var(--ac);color:#fff;border:none;border-radius:6px;font-family:inherit;font-size:11.5px;font-weight:600;cursor:pointer;transition:background .15s}
+.copy-btn:hover{background:var(--acd)}
+.month-badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;background:var(--acl);color:var(--ac);margin-left:6px}
+.proj-annualised-note{font-size:10.5px;color:var(--am);background:var(--aml);padding:4px 10px;border-radius:6px;display:inline-block;margin-bottom:10px}
+
+
+/* ─── Help Tips ─── */
+.help-icon{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:rgba(255,255,255,.22);color:#fff;font-size:10px;font-weight:800;cursor:pointer;border:1.5px solid rgba(255,255,255,.35);vertical-align:middle;margin-left:5px;flex-shrink:0;transition:background .15s}
+.help-icon:hover{background:rgba(255,255,255,.4)}
+.help-popup{position:fixed;z-index:9000;background:#fff;border:1px solid var(--bd);border-radius:12px;box-shadow:0 8px 32px rgba(13,27,62,.18);width:340px;max-width:calc(100vw - 32px);padding:0;overflow:hidden;animation:helpIn .15s ease}
+@keyframes helpIn{from{opacity:0;transform:translateY(-6px) scale(.97)}to{opacity:1;transform:none}}
+.help-popup-hdr{background:linear-gradient(135deg,var(--ac),var(--acd));padding:12px 16px;display:flex;align-items:center;justify-content:space-between}
+.help-popup-hdr-title{font-weight:800;font-size:13px;color:#fff}
+.help-popup-close{background:none;border:none;color:rgba(255,255,255,.7);font-size:18px;cursor:pointer;line-height:1;padding:0;transition:color .15s}
+.help-popup-close:hover{color:#fff}
+.help-popup-body{padding:14px 16px;max-height:70vh;overflow-y:auto}
+.help-section{margin-bottom:14px}
+.help-section:last-child{margin-bottom:0}
+.help-section-title{font-weight:800;font-size:11.5px;color:var(--tx);margin-bottom:8px;padding-bottom:5px;border-bottom:1.5px solid var(--bd);display:flex;align-items:center;gap:6px}
+.help-row{display:flex;gap:8px;align-items:flex-start;padding:7px 9px;border-radius:7px;margin-bottom:5px;transition:background .12s}
+.help-row:hover{background:var(--sf2)}
+.help-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:3px}
+.help-row-body{flex:1}
+.help-row-title{font-weight:700;font-size:11.5px;margin-bottom:2px}
+.help-row-desc{font-size:10.5px;color:var(--t2);line-height:1.45}
+.help-row-tip{font-size:10px;color:var(--ac);font-weight:600;margin-top:3px}
+.help-tip-pill{display:inline-block;background:var(--acl);color:var(--ac);border-radius:4px;padding:1px 6px;font-size:9.5px;font-weight:700;margin-right:4px}
+.help-memory{background:linear-gradient(135deg,#f0f4ff,#fff);border:1px solid var(--bd2);border-radius:8px;padding:10px 12px;font-size:11px;margin-top:6px}
+.help-memory strong{color:var(--ac)}
+#help-backdrop{display:none;position:fixed;inset:0;z-index:8999}
 </style>
 </head>
 <body>
@@ -127,6 +245,10 @@ select.sel{padding:5px 9px;background:var(--sf);border:1px solid var(--bd2);bord
     </div>
   </div>
   <div class="hdr-r">
+    <div class="page-nav">
+      <button class="page-tab active" data-page="dashboard" onclick="switchPage('dashboard')">📊 Dashboard</button>
+      <button class="page-tab" data-page="projections" onclick="switchPage('projections')">🔮 Projections</button>
+    </div>
     <button class="btn btn-wh" onclick="togglePop()">📋 Paste Data</button>
     <button class="btn btn-wh" id="b-backup" onclick="exportJSON()" style="display:none" title="Download JSON backup">💾 Backup</button>
     <button class="btn btn-wh" onclick="importJSON()" title="Load from JSON backup">📂 Load</button>
@@ -275,6 +397,108 @@ select.sel{padding:5px 9px;background:var(--sf);border:1px solid var(--bd2);bord
     <div class="copyright">© Lyca Surveying Engineering Services LLC. All rights reserved. | Confidential — Internal Use Only.</div>
   </div>
 </main>
+
+  <!-- ═══ PROJECTIONS PANEL ═══ -->
+  <div id="proj-panel" style="display:none">
+    <div id="proj-empty" class="proj-empty" style="display:none">
+      <div class="proj-empty-icon">🔮</div>
+      <div class="proj-empty-title">No historical data available</div>
+      <div class="proj-empty-hint">Import at least one year of financial data to generate projections</div>
+    </div>
+    <div id="proj-content" style="display:none">
+      <!-- Controls -->
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px">
+        <div><div class="proj-title">📈 AI Projections Engine</div><div class="proj-sub" id="proj-basis-label">Based on historical data</div></div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <button class="btn btn-gh" onclick="exportProjectionsPDF()" style="font-size:11.5px;padding:5px 12px">⬇ PDF</button>
+        <div class="proj-controls" style="margin:0">
+          <div class="proj-ctrl-group">
+            <span class="proj-ctrl-label">HORIZON</span><button class="help-icon" onclick="showHelp('horizon',this)" title="What does horizon mean?">?</button>
+            <select class="proj-select" id="proj-horizon" onchange="renderProjections()">
+              <option value="1m">Next Month</option>
+              <option value="3m">Next Quarter (3 mo)</option>
+              <option value="6m">Next 6 Months</option>
+              <option value="1">1 Year</option>
+              <option value="3" selected>3 Years</option>
+              <option value="5">5 Years</option>
+            </select>
+          </div>
+          <div class="proj-ctrl-group">
+            <span class="proj-ctrl-label">METHOD</span><button class="help-icon" onclick="showHelp('method',this)" title="How do forecasting methods differ?">?</button>
+            <select class="proj-select" id="proj-method" onchange="renderProjections()">
+              <option value="weighted">Weighted Trend</option>
+              <option value="linear">Linear Regression</option>
+              <option value="cagr">CAGR</option>
+            </select>
+          </div>
+        </div>
+        </div>
+      </div>
+<!-- Sub-tabs -->
+      <div class="proj-tabs">
+        <button class="proj-tab-btn active" onclick="switchProjTab('forecast',this)">📊 Forecast</button>
+        <button class="proj-tab-btn" onclick="switchProjTab('actions',this)">🎯 Action Plan</button>
+        <button class="proj-tab-btn" onclick="switchProjTab('insights',this)">🧠 Insights</button>
+        <button class="proj-tab-btn" onclick="switchProjTab('summary',this)">📋 Company Summary</button>
+      </div>
+      <!-- FORECAST TAB -->
+      <div id="ptab-forecast" class="proj-tab-pane active">
+        <div id="proj-warn" class="data-notice" style="display:none">⚠️ <span id="proj-warn-msg"></span></div>
+        <div id="proj-annualised-note" style="display:none"><span class="proj-annualised-note" id="proj-ann-text"></span><button class="help-icon" style="background:var(--am);border-color:var(--am)" onclick="showHelp('annualise',this)" title="What is annualisation?">?</button></div>
+        <div class="proj-kpis" id="proj-kpis"></div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+        <span style="font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.4px">Select Scenario</span>
+        <button class="help-icon" style="background:var(--bd2);color:var(--t2);border-color:var(--bd2)" onclick="showHelp('scenario',this)" title="What are scenarios?">?</button>
+      </div>
+      <div id="proj-scenarios" class="scenario-bar"></div>
+        <div style="margin-bottom:11px">
+          <div class="cc full">
+            <div class="ch"><div><div class="ct">Revenue &amp; Expense Forecast</div><div class="cs" id="proj-chart1-sub">Historical vs projected</div></div><span class="proj-badge base" id="proj-scenario-badge">Base</span></div>
+            <div class="cw xl"><canvas id="pc1"></canvas></div>
+          </div>
+        </div>
+        <div class="cg2" style="margin-bottom:11px">
+          <div class="cc">
+            <div class="ch"><div><div class="ct">Net Profit Projection</div><div class="cs">Confidence band by scenario</div></div></div>
+            <div class="cw lg"><canvas id="pc2"></canvas></div>
+          </div>
+          <div class="cc">
+            <div class="ch"><div><div class="ct">Margin % Trend</div><div class="cs">Historical and projected</div></div></div>
+            <div class="cw lg"><canvas id="pc3"></canvas></div>
+          </div>
+        </div>
+        <div class="cg2" style="margin-bottom:11px">
+          <div class="cc">
+            <div class="ch"><div><div class="ct">Monthly Revenue Pattern</div><div class="cs">Seasonal index analysis</div></div></div>
+            <div class="cw md"><canvas id="pc4"></canvas></div>
+          </div>
+          <div class="cc">
+            <div class="ch"><div><div class="ct">Year-on-Year Growth</div><div class="cs">Revenue &amp; profit growth %</div></div></div>
+            <div class="cw md"><canvas id="pc5"></canvas></div>
+          </div>
+        </div>
+        <div class="cc" style="margin-bottom:11px">
+          <div class="ch"><div><div class="ct">Multi-Period Forecast Summary</div><div class="cs">All three scenarios</div></div></div>
+          <div style="overflow-x:auto"><table class="horizon-table" id="proj-table"></table></div>
+        </div>
+      </div>
+      <!-- ACTIONS TAB -->
+      <div id="ptab-actions" class="proj-tab-pane">
+        <div id="proj-action-plan"></div>
+      </div>
+      <!-- INSIGHTS TAB -->
+      <div id="ptab-insights" class="proj-tab-pane">
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px" id="proj-insights"></div>
+      </div>
+      <!-- SUMMARY TAB -->
+      <div id="ptab-summary" class="proj-tab-pane">
+        <div id="proj-company-summary"></div>
+      </div>
+
+      <div class="copyright">© Lyca Surveying Engineering Services LLC — Projections are model-based estimates and do not constitute financial advice.</div>
+    </div>
+  </div>
+
 <div class="toast" id="toast"></div>
 <!-- Hidden PDF canvases -->
 <div style="position:fixed;left:-9999px;top:0;pointer-events:none">
@@ -765,6 +989,7 @@ function doInsights(r,p,am,tR,tE,nP,mg){
 async function exportPDF(){
   if(!S.reports.length)return;
   showToast('⏳ Building PDF…','i');
+  try{
   const{jsPDF}=window.jspdf;
   const doc=new jsPDF({orientation:'landscape',unit:'mm',format:'a4'});
   const W=297,H=210;
@@ -786,11 +1011,7 @@ async function exportPDF(){
     d.setFontSize(6.5);d.setTextColor(180,200,240);d.setFont('helvetica','normal');
     d.text('© Lyca Surveying Engineering Services LLC. Confidential — Internal Use Only.',10,H-2);
     // LYCA text watermark
-    d.saveGraphicsState();
-    d.setGState(new d.GState({opacity:0.04}));
-    d.setFontSize(80);d.setTextColor(30,77,183);d.setFont('helvetica','bold');
-    d.text('LYCA',W/2,H/2+15,{align:'center'});
-    d.restoreGraphicsState();
+    try{d.saveGraphicsState();d.setGState(new d.GState({opacity:0.04}));d.setFontSize(80);d.setTextColor(30,77,183);d.setFont('helvetica','bold');d.text('LYCA',W/2,H/2+15,{align:'center'});d.restoreGraphicsState();}catch(e){}
   };
   const sHd=(d,t,x,y,c)=>{d.setFillColor(...c);d.rect(x,y,70,.7,'F');d.setFontSize(7);d.setTextColor(...c);d.setFont('helvetica','bold');d.text(t,x,y-1.5);};
 
@@ -874,6 +1095,7 @@ async function exportPDF(){
   const fname=(isCompare?'Lyca_Comparison':'Lyca_'+( r?.yearLabel||'Report'))+'_Dashboard.pdf';
   doc.save(fname);
   showToast('✓ PDF downloaded','s');
+  }catch(pdfErr){showToast('PDF error: '+pdfErr.message,'e');console.error('PDF error:',pdfErr);}
 }
 
 
@@ -944,36 +1166,46 @@ function drawOutsideLabels(canvasId, cats, tot, colors){
 
 
 // ─── makePie: unified pie/doughnut with built-in segment labels ───
+// ── Global segment label plugin for donut/pie charts ──
+Chart.register({
+  id: 'pieSegmentLabels',
+  afterDraw(chart) {
+    const opts = chart.options._segLabels;
+    if (!opts || !opts.show) return;
+    const {data, tot, colors} = opts;
+    const ctx2 = chart.ctx;
+    const meta = chart.getDatasetMeta(0);
+    if (!meta || !meta.data || !meta.data.length) return;
+    ctx2.save();
+    meta.data.forEach((arc, i) => {
+      const val = data[i];
+      if (!val || val <= 0) return;
+      const pct = (val / tot * 100);
+      if (pct < 4) return; // skip slices too small to label
+      const midAngle = (arc.startAngle + arc.endAngle) / 2;
+      const innerR = arc.innerRadius || 0;
+      const outerR = arc.outerRadius || 80;
+      const r = innerR + (outerR - innerR) * 0.55; // slightly toward outer edge
+      const x = arc.x + Math.cos(midAngle) * r;
+      const y = arc.y + Math.sin(midAngle) * r;
+      // Draw shadow for readability
+      ctx2.font = 'bold 9.5px Plus Jakarta Sans,sans-serif';
+      ctx2.textAlign = 'center';
+      ctx2.textBaseline = 'middle';
+      ctx2.shadowColor = 'rgba(0,0,0,0.4)';
+      ctx2.shadowBlur = 3;
+      ctx2.fillStyle = '#fff';
+      ctx2.fillText(pct.toFixed(1) + '%', x, y);
+      ctx2.shadowBlur = 0;
+    });
+    ctx2.restore();
+  }
+});
+
+
 function makePie(canvasId, labels, data, colors, tot, showSegLabels){
   kd(canvasId);
-  const bgColors = colors.slice(0, labels.length).map((c,i) => c.length > 7 ? c : c);
-  // Register a one-time afterDraw plugin for this chart instance
-  const segLabelPlugin = {
-    id: 'segLabels_'+canvasId,
-    afterDraw(chart){
-      if(!showSegLabels) return;
-      const ctx2 = chart.ctx;
-      const meta = chart.getDatasetMeta(0);
-      if(!meta || !meta.data || !meta.data.length) return;
-      ctx2.save();
-      meta.data.forEach((arc, i) => {
-        const val = data[i];
-        if(!val || val<=0) return;
-        const pct = (val/tot*100);
-        if(pct < 3) return; // skip tiny slices
-        const midAngle = (arc.startAngle + arc.endAngle) / 2;
-        const r = (arc.innerRadius + arc.outerRadius) / 2;
-        const x = arc.x + Math.cos(midAngle) * r;
-        const y = arc.y + Math.sin(midAngle) * r;
-        ctx2.font = 'bold 10px Plus Jakarta Sans,sans-serif';
-        ctx2.textAlign = 'center';
-        ctx2.textBaseline = 'middle';
-        ctx2.fillStyle = '#fff';
-        ctx2.fillText(pct.toFixed(1)+'%', x, y);
-      });
-      ctx2.restore();
-    }
-  };
+  const bgColors = colors.slice(0, labels.length);
   return new Chart(document.getElementById(canvasId).getContext('2d'), {
     type: 'doughnut',
     data: {
@@ -981,21 +1213,28 @@ function makePie(canvasId, labels, data, colors, tot, showSegLabels){
       datasets: [{data, backgroundColor: bgColors, borderColor:'#fff', borderWidth: 2.5}]
     },
     options: {
-      responsive: true, maintainAspectRatio: false, cutout: showSegLabels ? '45%' : '52%',
-      layout: {padding: {right:8, left:4, top:4, bottom:4}},
+      responsive: true, maintainAspectRatio: false, cutout: showSegLabels ? '42%' : '52%',
+      layout: {padding: {right:6, left:6, top:6, bottom:6}},
+      _segLabels: {show: showSegLabels, data: data, tot: tot, colors: bgColors},
       plugins: {
         legend: {
           position: (showSegLabels && labels.length <= 7) ? 'bottom' : 'right',
           labels: {
             color:'#3d5070', boxWidth:9, padding: showSegLabels?6:5,
-            font:{family:'Plus Jakarta Sans', size: showSegLabels?9:9.5},
+            font:{family:'Plus Jakarta Sans', size: 9},
             generateLabels: ch => {
               const ds = ch.data.datasets[0];
-              return ch.data.labels.map((lbl,i) => ({
-                text: lbl + ' ' + (data[i]/tot*100).toFixed(1) + '% — AED '+fn(data[i]),
-                fillStyle: ds.backgroundColor[i],
-                strokeStyle:'#fff', lineWidth:1, hidden:false, index:i
-              }));
+              const manyItems = ch.data.labels.length > 10;
+              return ch.data.labels.map((lbl,i) => {
+                const maxLen = manyItems ? 16 : 22;
+                const shortName = lbl.length > maxLen ? lbl.slice(0,maxLen-1)+'.' : lbl;
+                const pct = (data[i]/tot*100).toFixed(1);
+                return {
+                  text: shortName + ' ' + pct + '%',
+                  fillStyle: ds.backgroundColor[i],
+                  strokeStyle:'#fff', lineWidth:1, hidden:false, index:i
+                };
+              });
             }
           }
         },
@@ -1008,7 +1247,6 @@ function makePie(canvasId, labels, data, colors, tot, showSegLabels){
         }
       }
     },
-    plugins: [segLabelPlugin]
   });
 }
 
@@ -1073,6 +1311,1111 @@ if(S.reports.length){
   document.getElementById('b-clr').style.display='';
   const _bkp=document.getElementById('b-backup');if(_bkp)_bkp.style.display='';
   renderYearTabs();buildPeriodSel();renderRptList();renderDash();
+}
+
+
+
+
+// ─── Help Tips System ───
+function showHelp(type, anchorEl) {
+  closeHelp();
+  const configs = {
+    scenario: {
+      title: '📊 Scenario Planning Guide',
+      sections: [
+        {
+          title: 'Three Planning Scenarios',
+          rows: [
+            { dot:'#c81c1c', title:'🔴 Pessimistic — Worst Case', desc:'Assumes things go wrong: lower sales, higher costs, delays, market slowdown.', tip:'💡 Use this to stay prepared and stress-test your finances' },
+            { dot:'#b45309', title:'🟡 Base Case — Most Likely', desc:'Realistic outlook based on current trends and normal business operations.', tip:'💡 Use this for budgeting, hiring plans, and day-to-day decisions' },
+            { dot:'#15803d', title:'🟢 Optimistic — Best Case', desc:'Assumes things go better: higher sales, lower costs, new opportunities captured.', tip:'💡 Use this to see your potential upside and set growth targets' }
+          ]
+        },
+        {
+          title: '🧠 Quick Memory Tip',
+          memory: '🔴 <strong>Pessimistic</strong> = <strong>Prepare</strong> for the worst &nbsp;|&nbsp; 🟡 <strong>Base</strong> = <strong>Plan</strong> for the likely &nbsp;|&nbsp; 🟢 <strong>Optimistic</strong> = <strong>Grow</strong> toward the best',
+          rows: []
+        }
+      ]
+    },
+    method: {
+      title: '📈 Forecasting Methods Explained',
+      sections: [
+        {
+          title: 'Choose the Right Method',
+          rows: [
+            { dot:'#1e4db7', title:'⚖️ Weighted Trend — Recent data matters more', desc:'Gives higher importance to recent months/years and lower weight to older data. Adapts quickly to business changes.', tip:'💡 Best for fast-changing businesses or when recent performance differs from older years' },
+            { dot:'#6d28d9', title:'📉 Linear Regression — Straight-line trend', desc:'Finds the overall direction (up or down) across all historical data points and extends that line into the future.', tip:'💡 Best for businesses with steady, consistent growth patterns' },
+            { dot:'#0369a1', title:'📊 CAGR — Compound Annual Growth Rate', desc:'Measures the average yearly growth rate assuming compounding — like a savings interest rate for your revenue.', tip:'💡 Best for long-term planning and comparing performance across different time periods' }
+          ]
+        },
+        {
+          title: '🔍 Quick Comparison',
+          rows: [
+            { dot:'#1e4db7', title:'Weighted Trend → Focus on latest data', desc:'If your last year was much better/worse than the others, this method captures that shift.' },
+            { dot:'#6d28d9', title:'Linear Regression → Predict steady trend', desc:'Use when growth is consistent and you want to smooth out year-to-year noise.' },
+            { dot:'#0369a1', title:'CAGR → Measure compounding growth', desc:'Use when you want to know "if we grow at X% every year, where do we end up?"' }
+          ]
+        }
+      ]
+    },
+    horizon: {
+      title: '📅 Forecast Horizon Guide',
+      sections: [
+        {
+          title: 'Short-Term (Monthly)',
+          rows: [
+            { dot:'#15803d', title:'Next Month', desc:'Projects one month ahead using average monthly growth. Best for cash flow and payroll planning.' },
+            { dot:'#15803d', title:'Next Quarter (3 months)', desc:'A 90-day view — useful for quarterly targets and supplier negotiations.' },
+            { dot:'#15803d', title:'Next 6 Months', desc:'Half-year planning — good for hiring decisions and equipment investment.' }
+          ]
+        },
+        {
+          title: 'Long-Term (Annual)',
+          rows: [
+            { dot:'#1e4db7', title:'1 Year', desc:'Full fiscal year projection — standard for annual budgeting and bank submissions.' },
+            { dot:'#6d28d9', title:'3 Years', desc:'Medium-term outlook — suitable for business plans and investor presentations.' },
+            { dot:'#b45309', title:'5 Years', desc:'Strategic horizon — use for prequalification documents and long-range planning. Note: uncertainty increases with distance.' }
+          ]
+        }
+      ]
+    },
+    annualise: {
+      title: '📐 Annualisation Explained',
+      sections: [
+        {
+          title: 'What is Annualisation?',
+          rows: [
+            { dot:'#1e4db7', title:'The Problem', desc:'If 2026 only has 4 months of data (Jan–Apr), comparing it directly to a full 2025 would make 2026 look much smaller — even if it\'s actually on a better pace.' },
+            { dot:'#15803d', title:'The Fix — Scale Up to 12 Months', desc:'We multiply the partial year\'s total by (12 ÷ completed months). 4 months × 3.00 = estimated full year. This puts all years on equal footing for projection purposes.' },
+            { dot:'#b45309', title:'The Caution', desc:'Annualisation assumes the remaining months will perform similarly to completed months. If the business is seasonal, actual results may differ. Check the seasonal pattern chart.' }
+          ]
+        },
+        {
+          title: '🔢 Formula',
+          memory: 'Annualised Revenue = <strong>Actual Revenue ÷ Completed Months × 12</strong><br>Example: AED 1,835,333 ÷ 4 × 12 = <strong>AED 5,506,000 projected annual</strong>',
+          rows: []
+        }
+      ]
+    }
+  };
+  const cfg = configs[type];
+  if (!cfg) return;
+  // Build popup
+  let body = '';
+  cfg.sections.forEach(sec => {
+    body += `<div class="help-section">`;
+    body += `<div class="help-section-title">${sec.title}</div>`;
+    if (sec.memory) body += `<div class="help-memory">${sec.memory}</div>`;
+    sec.rows.forEach(row => {
+      body += `<div class="help-row">
+        <div class="help-dot" style="background:${row.dot}"></div>
+        <div class="help-row-body">
+          <div class="help-row-title">${row.title}</div>
+          <div class="help-row-desc">${row.desc}</div>
+          ${row.tip ? `<div class="help-row-tip">${row.tip}</div>` : ''}
+        </div>
+      </div>`;
+    });
+    body += '</div>';
+  });
+  const popup = document.createElement('div');
+  popup.className = 'help-popup';
+  popup.id = 'help-popup';
+  popup.innerHTML = `
+    <div class="help-popup-hdr">
+      <div class="help-popup-hdr-title">${cfg.title}</div>
+      <button class="help-popup-close" onclick="closeHelp()">×</button>
+    </div>
+    <div class="help-popup-body">${body}</div>`;
+  document.body.appendChild(popup);
+  // Position near anchor
+  const backdrop = document.createElement('div');
+  backdrop.id = 'help-backdrop';
+  backdrop.style.display = 'block';
+  backdrop.onclick = closeHelp;
+  document.body.appendChild(backdrop);
+  // Smart position
+  if (anchorEl) {
+    const rect = anchorEl.getBoundingClientRect();
+    const pw = 340, ph = 400;
+    let left = rect.left;
+    let top  = rect.bottom + 6;
+    if (left + pw > window.innerWidth - 12) left = window.innerWidth - pw - 12;
+    if (top + ph > window.innerHeight - 12) top = rect.top - ph - 6;
+    popup.style.left = Math.max(8, left) + 'px';
+    popup.style.top  = Math.max(8, top) + 'px';
+  } else {
+    popup.style.left = '50%';
+    popup.style.top  = '50%';
+    popup.style.transform = 'translate(-50%,-50%)';
+  }
+}
+function closeHelp() {
+  const p = document.getElementById('help-popup');
+  const b = document.getElementById('help-backdrop');
+  if (p) p.remove();
+  if (b) b.remove();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// PROJECTIONS ENGINE v2 — replaces v1 projection functions only
+// ═══════════════════════════════════════════════════════════════
+
+// ── Projection state ──
+let PCH = {}; // projection chart instances
+let _projScenario = 'base'; // bear | base | bull
+
+// ── Current date awareness ──
+const TODAY = new Date();
+const CUR_YEAR  = TODAY.getFullYear();
+const CUR_MONTH = TODAY.getMonth(); // 0-based: 0=Jan, 4=May
+const MON_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+// ── Sub-tab switcher ──
+function switchProjTab(tab, btn) {
+  document.querySelectorAll('.proj-tab-pane').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.proj-tab-btn').forEach(b => b.classList.remove('active'));
+  const pane = document.getElementById('ptab-' + tab);
+  if (pane) pane.classList.add('active');
+  if (btn) btn.classList.add('active');
+  if (tab === 'actions')  renderActionPlan();
+  if (tab === 'summary')  renderCompanySummary();
+  if (tab === 'insights') renderProjInsightsTab();
+}
+
+// ── Annualise partial-year data ──
+// If a report's latest month is before Dec of its year, scale up to full-year equivalent
+function annualiseReport(r) {
+  const am = aM(r);
+  if (!am.length) return { rev:0, exp:0, net:0, months:0, isPartial:false, completedMonths:0 };
+  // Detect report year from first active month label e.g. "Jan-26"
+  const firstMon = am[0];
+  const yearSuffix = firstMon.slice(-2);
+  const reportYear = parseInt('20' + yearSuffix);
+  const isCurrentYear = reportYear === CUR_YEAR;
+  const isFutureYear  = reportYear > CUR_YEAR;
+
+  // ── KEY FIX: strip months that haven't happened yet ──
+  // CUR_MONTH is 0-based (0=Jan … 4=May). A month label "Jul-26" is index 6.
+  // For the current year, only keep months whose index < CUR_MONTH
+  // (i.e. strictly before the current month — we treat the running month as incomplete).
+  // For a future year, exclude ALL months (no data is real yet).
+  // For past years, keep all active months.
+  const totRev = r.totRev || {};
+  const totExp = r.totExp || {};
+
+  function monthIndex(monLabel) {
+    // "Jan-26" → 0, "Feb-26" → 1 … "Dec-26" → 11
+    return MON_NAMES.indexOf(monLabel.slice(0, 3));
+  }
+
+  let activeMs = am.filter(m => (totRev[m]||0) > 0 || (totExp[m]||0) > 0);
+
+  if (isFutureYear) {
+    // No future-year data is real
+    activeMs = [];
+  } else if (isCurrentYear) {
+    // Only months strictly before the current calendar month
+    activeMs = activeMs.filter(m => monthIndex(m) < CUR_MONTH);
+  }
+  // Past years: use all activeMs as-is
+
+  const completedMonths = activeMs.length;
+  if (completedMonths === 0) return { rev:0, exp:0, net:0, months:0, isPartial:false, completedMonths:0 };
+
+  const rawRev = activeMs.reduce((s,m) => s+(totRev[m]||0), 0);
+  const rawExp = activeMs.reduce((s,m) => s+(totExp[m]||0), 0);
+  const rawNet = activeMs.reduce((s,m) => s+(r.netProfit[m]||0), 0);
+
+  // Annualise if it's a partial year (current year with fewer than 12 completed months)
+  const isPartial = (isCurrentYear || isFutureYear) && completedMonths < 12;
+  const scale = isPartial && completedMonths > 0 ? 12 / completedMonths : 1;
+
+  return {
+    rev: rawRev * scale, exp: rawExp * scale, net: rawNet * scale,
+    rawRev, rawExp, rawNet, months: completedMonths, isPartial, completedMonths,
+    scale, reportYear
+  };
+}
+
+// ── Build historical annuals (date-aware) ──
+function buildHistoricalAnnuals() {
+  return S.reports.map(r => {
+    const ann  = annualiseReport(r);
+    const am   = aM(r).filter(m => { const mv=(r.totRev[m]||0)+(r.totExp[m]||0); return mv>0; });
+    // Seasonal: use raw monthly data only for completed months
+    const seasonal = {};
+    am.forEach(m => { seasonal[m.slice(0,3)] = (seasonal[m.slice(0,3)]||0) + (r.totRev[m]||0); });
+    // Expense categories
+    const expCats = {};
+    Object.entries(r.exp).forEach(([k,v]) => {
+      const g = k.includes(' › ') ? k.split(' › ')[0] : 'General';
+      expCats[g] = (expCats[g]||0) + am.reduce((s,mo) => s+(v[mo]||0), 0);
+    });
+    // Revenue by service (raw, not annualised)
+    const revServices = {};
+    Object.entries(r.rev).forEach(([k,v]) => {
+      const svc = k.replace(/.*› /,'');
+      revServices[svc] = (revServices[svc]||0) + am.reduce((s,mo) => s+(v[mo]||0), 0);
+    });
+    return {
+      year: r.yearLabel,
+      rev: ann.rev, exp: ann.exp, net: ann.net,
+      rawRev: ann.rawRev||ann.rev, rawExp: ann.rawExp||ann.exp,
+      margin: ann.rev > 0 ? ann.net/ann.rev*100 : 0,
+      months: ann.completedMonths,
+      isPartial: ann.isPartial,
+      scale: ann.scale||1,
+      seasonal, expCats, revServices,
+      latestMonth: am[am.length-1] || ''
+    };
+  }).sort((a,b) => (parseInt(a.year)||0)-(parseInt(b.year)||0));
+}
+
+// ── Build seasonal index ──
+function buildSeasonalIndex(annuals) {
+  const totals = {}; let grandTotal = 0;
+  MON_NAMES.forEach(m => { totals[m] = 0; });
+  annuals.forEach(a => {
+    Object.entries(a.seasonal).forEach(([m,v]) => { if(totals[m]!==undefined){ totals[m]+=v; grandTotal+=v; } });
+  });
+  const idx = {};
+  MON_NAMES.forEach(m => { idx[m] = grandTotal > 0 ? (totals[m]/grandTotal)*12 : 1; });
+  return idx;
+}
+
+// ── Projection math ──
+function projLinearRegression(vals) {
+  const n=vals.length; if(n<2) return {slope:0,intercept:vals[0]||0};
+  const xMean=(n-1)/2, yMean=vals.reduce((a,b)=>a+b,0)/n;
+  let num=0,den=0;
+  vals.forEach((y,x)=>{num+=(x-xMean)*(y-yMean);den+=(x-xMean)**2;});
+  const slope=den?num/den:0;
+  return {slope, intercept:yMean-slope*xMean};
+}
+function projCAGR(vals) {
+  const f=vals.filter(v=>v>0); if(f.length<2) return 0;
+  return Math.pow(f[f.length-1]/f[0],1/(f.length-1))-1;
+}
+function projWeightedTrend(vals) {
+  if(vals.length===1) return {lastVal:vals[0],growthRate:0};
+  const n=vals.length; let wSum=0,wGrowthSum=0;
+  for(let i=1;i<n;i++){
+    const w=Math.pow(2,i), g=vals[i-1]>0?(vals[i]-vals[i-1])/Math.abs(vals[i-1]):0;
+    wSum+=w; wGrowthSum+=w*g;
+  }
+  return {lastVal:vals[n-1], growthRate:wSum?wGrowthSum/wSum:0};
+}
+function projectValue(lastVal,growthRate,period,scenario,method) {
+  const adj={bear:-0.12,base:0,bull:0.10}[scenario];
+  const r=growthRate+adj;
+  return method==='linear' ? lastVal+lastVal*r*period : lastVal*Math.pow(1+r,period);
+}
+
+// ── Parse horizon: returns {periods, unit, label} ──
+function parseHorizon(val) {
+  if(val==='1m') return {periods:1,  unit:'month',  label:'1 Month',       isShort:true};
+  if(val==='3m') return {periods:3,  unit:'quarter', label:'1 Quarter',     isShort:true};
+  if(val==='6m') return {periods:6,  unit:'month',  label:'6 Months',      isShort:true};
+  if(val==='1')  return {periods:1,  unit:'year',   label:'1 Year',        isShort:false};
+  if(val==='3')  return {periods:3,  unit:'year',   label:'3 Years',       isShort:false};
+  if(val==='5')  return {periods:5,  unit:'year',   label:'5 Years',       isShort:false};
+  return {periods:3, unit:'year', label:'3 Years', isShort:false};
+}
+
+// ── Main render ──
+function renderProjections() {
+  const annuals = buildHistoricalAnnuals();
+  if(!annuals.length){
+    document.getElementById('proj-empty').style.display='';
+    document.getElementById('proj-content').style.display='none';
+    return;
+  }
+  document.getElementById('proj-empty').style.display='none';
+  document.getElementById('proj-content').style.display='';
+
+  const horizonVal = document.getElementById('proj-horizon').value;
+  const method     = document.getElementById('proj-method').value;
+  const sc         = _projScenario;
+  const hz         = parseHorizon(horizonVal);
+
+  // ── Date-awareness notice ──
+  const partialYears = annuals.filter(a=>a.isPartial);
+  const warnEl = document.getElementById('proj-warn');
+  const annEl  = document.getElementById('proj-annualised-note');
+  const annTxt = document.getElementById('proj-ann-text');
+  if(partialYears.length){
+    const py = partialYears[0];
+    warnEl.style.display='';
+    document.getElementById('proj-warn-msg').innerHTML =
+      `<strong>${py.year}</strong> data covers only <strong>${py.months} months</strong> (Jan–${MON_NAMES[py.months-1]}). ` +
+      `Values have been <strong>annualised (×${py.scale.toFixed(2)})</strong> for fair comparison. ` +
+      `Projections are based on actual completed months only.`;
+    annEl.style.display='';
+    annTxt.textContent = `📅 As of ${MON_NAMES[CUR_MONTH-1] || MON_NAMES[CUR_MONTH]} ${CUR_YEAR} — ${py.months} months actual data annualised for ${py.year}`;
+  } else {
+    warnEl.style.display='none';
+    annEl.style.display='none';
+  }
+
+  const histRevs  = annuals.map(a=>a.rev);
+  const histExps  = annuals.map(a=>a.exp);
+  const histNets  = annuals.map(a=>a.net);
+  const histMargs = annuals.map(a=>a.margin);
+  const lastA     = annuals[annuals.length-1];
+  const lastYear  = parseInt(lastA.year)||CUR_YEAR;
+
+  // Monthly rate = annual rate / 12 for short horizons
+  let revGrowthAnn, expGrowthAnn;
+  if(method==='linear'){
+    const rLR=projLinearRegression(histRevs), eLR=projLinearRegression(histExps);
+    revGrowthAnn = (histRevs[histRevs.length-1]||1) ? rLR.slope/Math.abs(histRevs[histRevs.length-1]||1) : 0;
+    expGrowthAnn = (histExps[histExps.length-1]||1) ? eLR.slope/Math.abs(histExps[histExps.length-1]||1) : 0;
+  } else if(method==='cagr'){
+    revGrowthAnn = projCAGR(histRevs);
+    expGrowthAnn = projCAGR(histExps);
+  } else {
+    revGrowthAnn = projWeightedTrend(histRevs).growthRate;
+    expGrowthAnn = projWeightedTrend(histExps).growthRate;
+  }
+  const capG=(g,mn,mx)=>Math.max(mn,Math.min(mx,g||0));
+  revGrowthAnn = capG(revGrowthAnn,-0.5,1.5);
+  expGrowthAnn = capG(expGrowthAnn,-0.3,1.5);
+
+  // For sub-year horizons: convert to monthly rates
+  const revGrowth = hz.isShort ? revGrowthAnn/12 : revGrowthAnn;
+  const expGrowth = hz.isShort ? expGrowthAnn/12 : expGrowthAnn;
+
+  const lastRev = histRevs[histRevs.length-1];
+  const lastExp = histExps[histExps.length-1];
+  const lastNet = histNets[histNets.length-1];
+  // For short horizons, use last month's actual average
+  const baseRev = hz.isShort ? lastA.rawRev/lastA.months : lastRev;
+  const baseExp = hz.isShort ? lastA.rawExp/lastA.months : lastRev>0 ? lastExp : lastA.rawExp/lastA.months;
+  const baseExpVal = hz.isShort ? lastA.rawExp/lastA.months : lastExp;
+
+  const scenarios=['bear','base','bull'];
+  const projData={};
+  scenarios.forEach(s2=>{
+    projData[s2]=[];
+    for(let p=1;p<=hz.periods;p++){
+      const pRev=Math.max(0,projectValue(baseRev,revGrowth,p,s2,method));
+      const pExp=Math.max(0,projectValue(baseExpVal,expGrowth,p,s2,method));
+      const pNet=pRev-pExp;
+      const pMarg=pRev>0?pNet/pRev*100:0;
+      const periodLabel = hz.isShort
+        ? MON_NAMES[(CUR_MONTH+p-1)%12]+'-'+(CUR_YEAR+(CUR_MONTH+p-1>=12?1:0)).toString().slice(-2)
+        : (lastYear+p).toString();
+      projData[s2].push({period:periodLabel,periodNum:p,rev:pRev,exp:pExp,net:pNet,margin:pMarg});
+    }
+  });
+
+  // ── Scenario cards ──
+  const scDescs={
+    bear:{name:'🐻 Pessimistic',desc:'Conservative: slower growth, higher cost pressure'},
+    base:{name:'📊 Base Case',  desc:'Realistic: trend continuation from historical data'},
+    bull:{name:'🚀 Optimistic', desc:'Upside: stronger demand, improved efficiency'}
+  };
+  const scColors={bear:'#c81c1c',base:'#1e4db7',bull:'#15803d'};
+  document.getElementById('proj-scenarios').innerHTML=scenarios.map(s2=>{
+    const d=projData[s2]; const last=d[d.length-1];
+    const tot=d.reduce((s,x)=>s+x.rev,0);
+    return `<div class="sc-card ${s2} ${s2===sc?'selected':''}" onclick="_projScenario='${s2}';renderProjections()">
+      <div class="sc-name" style="color:${scColors[s2]}">${scDescs[s2].name}</div>
+      <div class="sc-desc">${scDescs[s2].desc}</div>
+      <div class="sc-stat"><span>Total ${hz.label} Revenue</span><span style="color:${scColors[s2]}">AED ${fn(tot)}</span></div>
+      <div class="sc-stat"><span>End-Period Net</span><span style="color:${last.net>=0?'#15803d':'#c81c1c'}">AED ${fn(last.net)}</span></div>
+      <div class="sc-stat"><span>Margin</span><span>${last.margin.toFixed(1)}%</span></div>
+    </div>`;
+  }).join('');
+
+  // ── KPI Cards ──
+  const selData=projData[sc];
+  const nextP=selData[0], finalP=selData[selData.length-1];
+  const totSelRev=selData.reduce((s,d)=>s+d.rev,0);
+  const totSelNet=selData.reduce((s,d)=>s+d.net,0);
+  const revChgPct=baseRev>0?(nextP.rev-baseRev)/baseRev*100:0;
+  const netChgPct=Math.abs(lastNet)>0?(nextP.net-lastNet)/Math.abs(lastNet)*100:0;
+  const horizLabel=hz.isShort?hz.label:`${hz.periods}-Year`;
+  // KPI cards — hide cumulative when periods=1 to avoid showing same value twice
+  const showCumulative = hz.periods > 1;
+  const nextLbl = hz.isShort ? nextP.period : (lastYear+1).toString();
+  const cumLbl  = hz.isShort ? hz.label : hz.periods+'-Year';
+  const priorRev = hz.isShort ? baseRev : lastRev;
+  const priorExp = hz.isShort ? baseExpVal : lastExp;
+  const expChgPct = ((nextP.exp-priorExp)/Math.max(Math.abs(priorExp),1))*100;
+  document.getElementById('proj-kpis').innerHTML=`
+    <div class="proj-kc" style="--pkc:#1e4db7">
+      <div class="proj-kc-lbl">${nextLbl} Revenue</div>
+      <div class="proj-kc-val">AED ${fn(nextP.rev)}</div>
+      <div class="proj-kc-sub">vs prior: AED ${fn(priorRev)}</div>
+      <span class="proj-kc-change ${revChgPct>=0?'up':'dn'}">${revChgPct>=0?'▲':'▼'} ${Math.abs(revChgPct).toFixed(1)}%</span>
+    </div>
+    <div class="proj-kc" style="--pkc:#b45309">
+      <div class="proj-kc-lbl">${nextLbl} Expenses</div>
+      <div class="proj-kc-val">AED ${fn(nextP.exp)}</div>
+      <div class="proj-kc-sub">vs prior: AED ${fn(priorExp)}</div>
+      <span class="proj-kc-change ${expChgPct<=0?'up':'dn'}">${expChgPct<=0?'▼ down':'▲ up'} ${Math.abs(expChgPct).toFixed(1)}%</span>
+    </div>
+    <div class="proj-kc" style="--pkc:${nextP.net>=0?'#15803d':'#c81c1c'}">
+      <div class="proj-kc-lbl">${nextLbl} Net Profit</div>
+      <div class="proj-kc-val">AED ${fn(nextP.net)}</div>
+      <div class="proj-kc-sub">${nextP.margin.toFixed(1)}% margin</div>
+      <span class="proj-kc-change ${netChgPct>=0?'up':'dn'}">${netChgPct>=0?'▲':'▼'} ${Math.abs(netChgPct).toFixed(1)}%</span>
+    </div>
+    ${showCumulative?`<div class="proj-kc" style="--pkc:#6d28d9">
+      <div class="proj-kc-lbl">${cumLbl} Revenue</div>
+      <div class="proj-kc-val">AED ${fn(totSelRev)}</div>
+      <div class="proj-kc-sub">Cumulative all ${hz.periods} ${hz.unit}s</div>
+    </div>
+    <div class="proj-kc" style="--pkc:${totSelNet>=0?'#0369a1':'#c81c1c'}">
+      <div class="proj-kc-lbl">${cumLbl} Net Profit</div>
+      <div class="proj-kc-val">AED ${fn(totSelNet)}</div>
+      <div class="proj-kc-sub">Cumulative projected</div>
+    </div>`:''}
+    <div class="proj-kc" style="--pkc:${finalP.margin>=20?'#15803d':finalP.margin>=10?'#b45309':'#c81c1c'}">
+      <div class="proj-kc-lbl">End-Period Margin</div>
+      <div class="proj-kc-val">${finalP.margin.toFixed(1)}%</div>
+      <div class="proj-kc-sub">${finalP.margin>=25?'Excellent':finalP.margin>=15?'Good':finalP.margin>=5?'Moderate':'Needs attention'}</div>
+    </div>`;
+
+  // Badge + sub-label
+  const bLabels={bear:'Pessimistic',base:'Base Case',bull:'Optimistic'};
+  document.getElementById('proj-scenario-badge').textContent=bLabels[sc];
+  document.getElementById('proj-scenario-badge').className='proj-badge '+sc;
+  document.getElementById('proj-chart1-sub').textContent=`${annuals.length} year(s) history + ${hz.label} ${sc} projection`;
+  document.getElementById('proj-basis-label').innerHTML=
+    `Based on ${annuals.map(a=>a.year+(a.isPartial?` <span class="month-badge">${a.months}mo annualised</span>`:'')+'').join(', ')} · ${method==='weighted'?'Weighted Trend':method==='linear'?'Linear Regression':'CAGR'} · ${bLabels[sc]}`;
+
+  // ── Chart 1: Revenue & Expense Forecast ──
+  pkd('pc1');
+  const histLabels=annuals.map(a=>a.year+(a.isPartial?'*':''));
+  const projLabels=selData.map(d=>d.period);
+  const allLabels=[...histLabels,...projLabels];
+  const bearRevs=projData.bear.map(d=>d.rev), bullRevs=projData.bull.map(d=>d.rev), baseRevs=projData.base.map(d=>d.rev), baseExps=projData.base.map(d=>d.exp);
+  PCH.pc1=new Chart(document.getElementById('pc1').getContext('2d'),{
+    type:'bar',
+    data:{labels:allLabels,datasets:[
+      {label:'Historical Revenue',data:[...histRevs,...Array(projLabels.length).fill(null)],backgroundColor:'rgba(30,77,183,.7)',borderRadius:5,order:3},
+      {label:'Historical Expenses',data:[...histExps,...Array(projLabels.length).fill(null)],backgroundColor:'rgba(180,83,9,.6)',borderRadius:5,order:3},
+      {label:'Projected Revenue (Base)',data:[...Array(histLabels.length).fill(null),...baseRevs],backgroundColor:'rgba(30,77,183,.35)',borderRadius:5,order:3},
+      {label:'Projected Expenses (Base)',data:[...Array(histLabels.length).fill(null),...baseExps],backgroundColor:'rgba(180,83,9,.3)',borderRadius:5,order:3},
+      {type:'line',label:'Optimistic',data:[...Array(histLabels.length).fill(null),...bullRevs],borderColor:'#15803d',borderWidth:1.5,borderDash:[4,4],pointRadius:3,fill:false,tension:.3,order:1},
+      {type:'line',label:'Pessimistic',data:[...Array(histLabels.length).fill(null),...bearRevs],borderColor:'#c81c1c',borderWidth:1.5,borderDash:[4,4],pointRadius:3,fill:false,tension:.3,order:2}
+    ]},
+    options:{...cO('AED'),scales:{x:axS(),y:{...axS(),ticks:{...axS().ticks,callback:v=>fk(v)}}}}
+  });
+
+  // ── Chart 2: Net Profit ──
+  pkd('pc2');
+  const bearNets=projData.bear.map(d=>d.net),baseNets=projData.base.map(d=>d.net),bullNets=projData.bull.map(d=>d.net);
+  PCH.pc2=new Chart(document.getElementById('pc2').getContext('2d'),{
+    type:'line',
+    data:{labels:allLabels,datasets:[
+      {label:'Historical Net Profit',data:[...histNets,...Array(projLabels.length).fill(null)],borderColor:'#1e4db7',backgroundColor:'rgba(30,77,183,.1)',borderWidth:2.5,pointRadius:5,fill:true,tension:.3},
+      {label:'Optimistic',data:[...Array(histLabels.length).fill(null),...bullNets],borderColor:'#15803d',borderDash:[5,3],borderWidth:2,pointRadius:3,fill:false,tension:.3},
+      {label:'Base Case',data:[...Array(histLabels.length).fill(null),...baseNets],borderColor:'#1e4db7',borderDash:[5,3],borderWidth:2.5,pointRadius:4,fill:false,tension:.3},
+      {label:'Pessimistic',data:[...Array(histLabels.length).fill(null),...bearNets],borderColor:'#c81c1c',borderDash:[5,3],borderWidth:2,pointRadius:3,fill:false,tension:.3}
+    ]},
+    options:{...cO('AED'),scales:{x:axS(),y:{...axS(),ticks:{...axS().ticks,callback:v=>fk(v)}}}}
+  });
+
+  // ── Chart 3: Margin % ──
+  pkd('pc3');
+  const baseMargs=projData.base.map(d=>d.margin),bearMargs=projData.bear.map(d=>d.margin),bullMargs=projData.bull.map(d=>d.margin);
+  PCH.pc3=new Chart(document.getElementById('pc3').getContext('2d'),{
+    type:'line',
+    data:{labels:allLabels,datasets:[
+      {label:'Historical Margin %',data:[...histMargs,...Array(projLabels.length).fill(null)],borderColor:'#6d28d9',backgroundColor:'rgba(109,40,217,.08)',borderWidth:2.5,pointRadius:5,fill:true,tension:.3},
+      {label:'Optimistic',data:[...Array(histLabels.length).fill(null),...bullMargs],borderColor:'#15803d',borderDash:[5,3],borderWidth:1.5,pointRadius:3,fill:false,tension:.3},
+      {label:'Base Case',data:[...Array(histLabels.length).fill(null),...baseMargs],borderColor:'#6d28d9',borderDash:[5,3],borderWidth:2.5,pointRadius:4,fill:false,tension:.3},
+      {label:'Pessimistic',data:[...Array(histLabels.length).fill(null),...bearMargs],borderColor:'#c81c1c',borderDash:[5,3],borderWidth:1.5,pointRadius:3,fill:false,tension:.3}
+    ]},
+    options:{...cO('%'),scales:{x:axS(),y:{...axS(),ticks:{...axS().ticks,callback:v=>v.toFixed(0)+'%'}}}}
+  });
+
+  // ── Chart 4: Seasonal ──
+  pkd('pc4');
+  const seasonIdx=buildSeasonalIndex(annuals);
+  const seasonVals=MON_NAMES.map(m=>((seasonIdx[m]||0)/12*100));
+  PCH.pc4=new Chart(document.getElementById('pc4').getContext('2d'),{
+    type:'bar',
+    data:{labels:MON_NAMES,datasets:[{label:'Revenue Share %',data:seasonVals,backgroundColor:seasonVals.map(v=>v>=10?'rgba(30,77,183,.8)':v>=7?'rgba(109,40,217,.7)':'rgba(180,83,9,.6)'),borderRadius:4}]},
+    options:{...cO('%'),scales:{x:axS(),y:{...axS(),ticks:{...axS().ticks,callback:v=>v.toFixed(1)+'%'}}}}
+  });
+
+  // ── Chart 5: YoY Growth ──
+  pkd('pc5');
+  const growthLabels=[],revGrowths=[],netGrowths2=[];
+  for(let i=1;i<annuals.length;i++){
+    growthLabels.push(annuals[i-1].year+'→'+annuals[i].year);
+    revGrowths.push(annuals[i-1].rev>0?(annuals[i].rev-annuals[i-1].rev)/annuals[i-1].rev*100:0);
+    netGrowths2.push(annuals[i-1].net!==0?(annuals[i].net-annuals[i-1].net)/Math.abs(annuals[i-1].net)*100:0);
+  }
+  growthLabels.push(lastYear+'→'+(lastYear+1)+' (proj)');
+  revGrowths.push(revChgPct); netGrowths2.push(netChgPct);
+  PCH.pc5=new Chart(document.getElementById('pc5').getContext('2d'),{
+    type:'bar',
+    data:{labels:growthLabels,datasets:[
+      {label:'Revenue Growth %',data:revGrowths,backgroundColor:revGrowths.map(v=>v>=0?'rgba(30,77,183,.75)':'rgba(200,28,28,.7)'),borderRadius:4},
+      {label:'Profit Growth %',data:netGrowths2,backgroundColor:netGrowths2.map(v=>v>=0?'rgba(21,128,61,.75)':'rgba(200,28,28,.6)'),borderRadius:4}
+    ]},
+    options:{...cO('%'),scales:{x:axS(),y:{...axS(),ticks:{...axS().ticks,callback:v=>v.toFixed(0)+'%'}}}}
+  });
+
+  // ── Horizon Table ──
+  const scOrder=['bear','base','bull'],scLabel={bear:'🐻 Pessimistic',base:'📊 Base Case',bull:'🚀 Optimistic'};
+  let th=`<thead><tr><th>Scenario / Period</th>${selData.map(d=>`<th>${d.period}</th>`).join('')}<th>Total</th></tr></thead><tbody>`;
+  scOrder.forEach(s2=>{
+    const sd=projData[s2];
+    th+=`<tr><td colspan="${hz.periods+2}" style="padding:4px 12px;background:var(--sf2);font-size:10px;font-weight:700;letter-spacing:.4px;color:var(--t3);text-transform:uppercase">${scLabel[s2]}</td></tr>`;
+    const tR=sd.reduce((s,d)=>s+d.rev,0),tE=sd.reduce((s,d)=>s+d.exp,0),tN=sd.reduce((s,d)=>s+d.net,0);
+    th+=`<tr ${s2===sc?'style="background:rgba(30,77,183,.04)"':''}><td style="padding-left:24px">Revenue</td>${sd.map(d=>`<td class="pos">${fn(d.rev)}</td>`).join('')}<td class="pos" style="font-weight:800">${fn(tR)}</td></tr>`;
+    th+=`<tr ${s2===sc?'style="background:rgba(30,77,183,.04)"':''}><td style="padding-left:24px">Expenses</td>${sd.map(d=>`<td class="neg">${fn(d.exp)}</td>`).join('')}<td class="neg">${fn(tE)}</td></tr>`;
+    th+=`<tr ${s2===sc?'style="background:rgba(30,77,183,.04)"':''}><td style="padding-left:24px">Net Profit</td>${sd.map(d=>`<td class="${d.net>=0?'pos':'neg'}">${fn(d.net)}</td>`).join('')}<td class="${tN>=0?'pos':'neg'}" style="font-weight:800">${fn(tN)}</td></tr>`;
+    th+=`<tr ${s2===sc?'style="background:rgba(30,77,183,.04)"':''}><td style="padding-left:24px">Margin %</td>${sd.map(d=>`<td style="color:${d.margin>=20?'#15803d':d.margin>=10?'#b45309':'#c81c1c'}">${d.margin.toFixed(1)}%</td>`).join('')}<td style="color:#6d28d9">${(tN/tR*100).toFixed(1)}%</td></tr>`;
+  });
+  document.getElementById('proj-table').innerHTML=th+'</tbody>';
+}
+
+// ── Action Plan tab ──
+function renderActionPlan() {
+  const annuals=buildHistoricalAnnuals();
+  if(!annuals.length){document.getElementById('proj-action-plan').innerHTML='<p style="color:var(--t3);padding:20px">Load data to generate action plan.</p>';return;}
+  const lastA=annuals[annuals.length-1];
+  // Aggregate revenue by service across all years
+  const allRevSvcs={}, allExpCats={};
+  annuals.forEach(a=>{
+    Object.entries(a.revServices||{}).forEach(([k,v])=>{ allRevSvcs[k]=(allRevSvcs[k]||0)+v; });
+    Object.entries(a.expCats||{}).forEach(([k,v])=>{ allExpCats[k]=(allExpCats[k]||0)+v; });
+  });
+  const topRevSvcs=Object.entries(allRevSvcs).sort((a,b)=>b[1]-a[1]).filter(([,v])=>v>0).slice(0,5);
+  const topExpCats=Object.entries(allExpCats).sort((a,b)=>b[1]-a[1]).filter(([,v])=>v>0).slice(0,5);
+  const totalRev=Object.values(allRevSvcs).reduce((s,v)=>s+v,0);
+  const totalExp=Object.values(allExpCats).reduce((s,v)=>s+v,0);
+  const topSvc=topRevSvcs[0]||['Surveyor Hire',0];
+  const topExp=topExpCats[0]||['Employee Expenses',0];
+  const topSvcPct=(topSvc[1]/totalRev*100).toFixed(0);
+  const topExpPct=(topExp[1]/totalExp*100).toFixed(0);
+  const lastRev=lastA.rev||1;
+  const monthlyAvgRev=(lastA.rawRev||lastA.rev)/lastA.months;
+  // Growth rate
+  let revGrowth=0;
+  if(annuals.length>=2){
+    const prev=annuals[annuals.length-2];
+    revGrowth=prev.rev>0?(lastA.rev-prev.rev)/prev.rev*100:0;
+  }
+  const steps=[
+    {
+      priority:'high', icon:'🚀', title:`Scale ${topSvc[0]} — Your #1 Revenue Driver`,
+      desc:`<strong>${topSvc[0]}</strong> accounts for <strong>${topSvcPct}%</strong> of total revenue (AED ${fn(topSvc[1])}). ` +
+           `<strong>Step 1:</strong> Increase monthly capacity by 20% by adding one dedicated team. ` +
+           `<strong>Step 2:</strong> When monthly revenue from this service exceeds AED ${fn(monthlyAvgRev*0.5)}, ` +
+           `initiate geographic expansion to a second zone or emirate. ` +
+           `<strong>Step 3:</strong> Formalise a rate card for bulk/retainer contracts with top clients.`
+    },
+    {
+      priority:'high', icon:'📋', title:'Formalise Surveyor Hire Pipeline',
+      desc:`Surveyor Hire is likely your fastest-growing revenue stream. ` +
+           `<strong>Step 1:</strong> Build a roster of 10+ pre-qualified freelance surveyors. ` +
+           `<strong>Step 2:</strong> Introduce a minimum monthly hire commitment with 3 anchor clients. ` +
+           `<strong>Step 3:</strong> Once monthly hire revenue consistently exceeds AED ${fn(monthlyAvgRev*0.4)}, ` +
+           `convert top performers to full-time staff to reduce per-hire cost by ~15–20%.`
+    },
+    {
+      priority:'high', icon:'💰', title:`Control ${topExp[0]} — Largest Cost Centre`,
+      desc:`<strong>${topExp[0]}</strong> is <strong>${topExpPct}%</strong> of total expenses (AED ${fn(topExp[1])}). ` +
+           `<strong>Step 1:</strong> Audit this category for redundancies — target a 10% reduction without impacting output. ` +
+           `<strong>Step 2:</strong> Introduce monthly cost caps per sub-category. ` +
+           `<strong>Step 3:</strong> Benchmark against industry norms; if above 60% of revenue, implement a hiring freeze until margins recover to 20%+.`
+    },
+    {
+      priority:'med', icon:'📈', title:'Diversify Revenue Mix to Reduce Concentration Risk',
+      desc:`Top service contributes ${topSvcPct}% of revenue — over-reliance creates fragility. ` +
+           `<strong>Step 1:</strong> Identify 2–3 underperforming services with growth potential. ` +
+           `<strong>Step 2:</strong> Run targeted campaigns for these services for 90 days. ` +
+           `<strong>Step 3:</strong> Target that no single service exceeds 40% of revenue by end of next fiscal year.`
+    },
+    {
+      priority:'med', icon:'🔁', title:'Build Recurring Revenue Through Retainer Contracts',
+      desc:`Project-based revenue creates cash flow volatility. ` +
+           `<strong>Step 1:</strong> Identify top 5 clients by lifetime value. ` +
+           `<strong>Step 2:</strong> Propose a monthly retainer package (e.g. fixed surveying hours + priority response). ` +
+           `<strong>Step 3:</strong> Target 30% of revenue from retainer contracts within 12 months — this improves cash flow predictability and business valuation multiples.`
+    },
+    {
+      priority:'med', icon:'🏗️', title:'Invest in Equipment to Reduce Outsourcing Costs',
+      desc:`Outsourcement and equipment rental expenses are recurring profit drains. ` +
+           `<strong>Step 1:</strong> Calculate break-even point for purchasing vs renting key equipment (typically 8–12 months). ` +
+           `<strong>Step 2:</strong> Prioritise equipment used in top-3 revenue services. ` +
+           `<strong>Step 3:</strong> Structure as a finance lease to preserve cash flow while building owned assets.`
+    },
+    {
+      priority:'low', icon:'📊', title:'Implement Monthly Financial Review Cadence',
+      desc:`<strong>Step 1:</strong> Set a fixed monthly financial review (first week of each month). ` +
+           `<strong>Step 2:</strong> Track 5 KPIs: Monthly Revenue, Expense Ratio, Gross Margin, Accounts Receivable Days, and New Client Wins. ` +
+           `<strong>Step 3:</strong> If Expense Ratio exceeds 75%, trigger a cost review meeting immediately. ` +
+           `<strong>Step 4:</strong> Share simplified monthly P&L with leadership to build financial literacy across the team.`
+    },
+    {
+      priority:'low', icon:'🌍', title:'Geographic Expansion Readiness Checklist',
+      desc:`When annual revenue exceeds AED ${fn(lastRev*1.5)}: ` +
+           `<strong>Step 1:</strong> Evaluate Abu Dhabi and Northern Emirates markets (lower competition, high infrastructure spend). ` +
+           `<strong>Step 2:</strong> Register with TAMM / DED for the target emirate. ` +
+           `<strong>Step 3:</strong> Assign one Business Development Manager before operational launch. ` +
+           `<strong>Step 4:</strong> Target 15% of total revenue from new geography within 18 months of launch.`
+    }
+  ];
+  const badgeMap={high:'<span class="action-step-badge badge-high">High Priority</span>',med:'<span class="action-step-badge badge-med">Medium Priority</span>',low:'<span class="action-step-badge badge-low">Planning Phase</span>'};
+  document.getElementById('proj-action-plan').innerHTML=
+    `<div style="margin-bottom:10px;font-size:11.5px;color:var(--t2)">Data-driven action plan based on <strong>${annuals.map(a=>a.year).join(', ')}</strong> financials. Steps are sequenced — complete Step 1 before advancing.</div>` +
+    steps.map((step,i)=>`
+    <div class="action-step">
+      <div class="action-step-num">${i+1}</div>
+      <div class="action-step-body">
+        <div class="action-step-title">${step.icon} ${step.title}${badgeMap[step.priority]}</div>
+        <div class="action-step-desc">${step.desc}</div>
+      </div>
+    </div>`).join('');
+}
+
+// ── Insights tab ──
+function renderProjInsightsTab() {
+  const annuals=buildHistoricalAnnuals();
+  if(!annuals.length){document.getElementById('proj-insights').innerHTML='';return;}
+  const method=document.getElementById('proj-method').value;
+  const horizonVal=document.getElementById('proj-horizon').value;
+  const hz=parseHorizon(horizonVal);
+  const histRevs=annuals.map(a=>a.rev),histExps=annuals.map(a=>a.exp),histNets=annuals.map(a=>a.net);
+  let revGrowthAnn=projWeightedTrend(histRevs).growthRate;
+  let expGrowthAnn=projWeightedTrend(histExps).growthRate;
+  const capG=(g,mn,mx)=>Math.max(mn,Math.min(mx,g||0));
+  revGrowthAnn=capG(revGrowthAnn,-0.5,1.5); expGrowthAnn=capG(expGrowthAnn,-0.3,1.5);
+  const lastA=annuals[annuals.length-1], lastYear=parseInt(lastA.year)||CUR_YEAR;
+  const seasonIdx=buildSeasonalIndex(annuals);
+  // Build projData for insights
+  const baseNext={rev:projectValue(lastA.rev,revGrowthAnn,1,'base',method),exp:projectValue(lastA.exp,expGrowthAnn,1,'base',method)};
+  baseNext.net=baseNext.rev-baseNext.exp; baseNext.margin=baseNext.rev>0?baseNext.net/baseNext.rev*100:0;
+  const baseFinal={rev:projectValue(lastA.rev,revGrowthAnn,hz.periods,'base',method),exp:projectValue(lastA.exp,expGrowthAnn,hz.periods,'base',method)};
+  baseFinal.net=baseFinal.rev-baseFinal.exp; baseFinal.margin=baseFinal.rev>0?baseFinal.net/baseFinal.rev*100:0;
+  const bullFinal={rev:projectValue(lastA.rev,revGrowthAnn,hz.periods,'bull',method),exp:projectValue(lastA.exp,expGrowthAnn,hz.periods,'bull',method)};
+  bullFinal.net=bullFinal.rev-bullFinal.exp;
+  const bearFinal={rev:projectValue(lastA.rev,revGrowthAnn,hz.periods,'bear',method),exp:projectValue(lastA.exp,expGrowthAnn,hz.periods,'bear',method)};
+  bearFinal.net=bearFinal.rev-bearFinal.exp;
+  const expRatio=expGrowthAnn/(revGrowthAnn||0.01);
+  const peakMon=MON_NAMES.reduce((a,m)=>(seasonIdx[m]||0)>(seasonIdx[a]||0)?m:a,MON_NAMES[0]);
+  const weakMon=MON_NAMES.reduce((a,m)=>(seasonIdx[m]||0)<(seasonIdx[a]||0)?m:a,MON_NAMES[0]);
+  const peakShare=((seasonIdx[peakMon]||0)/12*100).toFixed(1);
+  // Top revenue and expense items
+  const allRevSvcs={}, allExpCats={};
+  annuals.forEach(a=>{
+    Object.entries(a.revServices||{}).forEach(([k,v])=>{ allRevSvcs[k]=(allRevSvcs[k]||0)+v; });
+    Object.entries(a.expCats||{}).forEach(([k,v])=>{ allExpCats[k]=(allExpCats[k]||0)+v; });
+  });
+  const topRevArr=Object.entries(allRevSvcs).sort((a,b)=>b[1]-a[1]).slice(0,3);
+  const topExpArr=Object.entries(allExpCats).sort((a,b)=>b[1]-a[1]).slice(0,3);
+  const totalRev=Object.values(allRevSvcs).reduce((s,v)=>s+v,0);
+  const totalExp=Object.values(allExpCats).reduce((s,v)=>s+v,0);
+  const revTrend=revGrowthAnn>0.15?'strong upward':revGrowthAnn>0?'moderate upward':'declining';
+  const profitRisk=baseFinal.margin<5?90:baseFinal.margin<15?50:baseFinal.margin<25?25:10;
+  const ins=[
+    {icon:'📈',bg:'#dbeafe',title:'Revenue Trajectory',
+     body:`Historical revenue trend: <strong>${revTrend}</strong> (avg ${(revGrowthAnn*100).toFixed(1)}%/yr). ` +
+          `Projected next year: <strong>AED ${fn(baseNext.rev)}</strong>. ` +
+          `<strong>Focus areas:</strong> ${topRevArr.map(([k,v])=>`${k} (${(v/totalRev*100).toFixed(0)}%)`).join(', ')}.`},
+    {icon:'💰',bg:'#dcfce7',title:'Profitability Outlook',risk:profitRisk,
+     body:`End-period margin: <strong>${baseFinal.margin.toFixed(1)}%</strong>. ` +
+          (baseFinal.margin>=20?'Strong profitability trajectory. Focus on sustaining cost discipline while scaling.':
+           baseFinal.margin>=10?'Moderate margin. Target 20%+ by reducing the top expense category by 10%.':
+           'Margin under pressure. Immediate priority: freeze discretionary spending and renegotiate top supplier contracts.')},
+    {icon:'⚠️',bg:expRatio>1.1?'#fee2e2':'#fef3c7',title:'Expense Pressure',
+     body:expRatio>1.1
+       ?`Expenses growing <strong>${(expRatio*100-100).toFixed(0)}% faster</strong> than revenue. ` +
+        `Top cost drains: <strong>${topExpArr.map(([k,v])=>`${k} (${(v/totalExp*100).toFixed(0)}%)`).join(', ')}</strong>. ` +
+        `Reduce each by 10% to recover ~AED ${fn(totalExp*0.1)} annually.`
+       :`Expense growth is tracking below revenue — positive leverage. Maintain this spread. ` +
+        `Monitor: <strong>${topExpArr[0]?.[0]||'Employee Expenses'}</strong> as it becomes a larger share with scale.`},
+    {icon:'🎯',bg:'#e0f2fe',title:'Top Services to Grow',
+     body:`Services with highest revenue contribution: ` +
+          topRevArr.map(([k,v],i)=>`<strong>${i+1}. ${k}</strong> — AED ${fn(v)} (${(v/totalRev*100).toFixed(0)}%)`).join('; ') +
+          `. Prioritise these for capacity expansion and client acquisition.`},
+    {icon:'🔥',bg:'#fef3c7',title:'Cost Categories to Monitor',
+     body:`Largest expense categories: ` +
+          topExpArr.map(([k,v],i)=>`<strong>${i+1}. ${k}</strong> — AED ${fn(v)} (${(v/totalExp*100).toFixed(0)}%)`).join('; ') +
+          `. Implement monthly budget caps for each. A 10% reduction in the top category saves AED ${fn(topExpArr[0]?.[1]*0.1||0)}/yr.`},
+    {icon:'📅',bg:'#ede9fe',title:'Seasonal Strategy',
+     body:`Peak month: <strong>${peakMon} (${peakShare}% of avg annual revenue)</strong>. Weakest: <strong>${weakMon}</strong>. ` +
+          `Build pipeline in ${MON_NAMES[(MON_NAMES.indexOf(peakMon)-2+12)%12]}–${MON_NAMES[(MON_NAMES.indexOf(peakMon)-1+12)%12]} ` +
+          `to maximise peak season capture. Pre-hire surveyors 6–8 weeks before peak.`},
+    {icon:'🎯',bg:'#fef9c3',title:`${hz.periods>1?hz.periods+'-Period':hz.label} Outcome Range`,
+     body:`Pessimistic: <strong>AED ${fn(bearFinal.net)}</strong>. Optimistic: <strong>AED ${fn(bullFinal.net)}</strong>. ` +
+          `Execution gap: <strong>AED ${fn(bullFinal.net-bearFinal.net)}</strong>. ` +
+          `Closing this gap requires consistent action on the top 3 growth levers.`},
+    {icon:annuals.length>=3?'✅':annuals.length===2?'📊':'⚠️',
+     bg:annuals.length>=3?'#dcfce7':annuals.length===2?'#fef3c7':'#fee2e2',
+     title:`Data Confidence: ${annuals.length>=3?'Good':annuals.length===2?'Medium':'Low'}`,
+     risk:annuals.length>=3?20:annuals.length===2?40:75,
+     body:annuals.length>=3
+       ?`<strong>${annuals.length} years</strong> of data — solid statistical base. Base-case is a reliable benchmark.`
+       :annuals.length===2
+       ?`<strong>2 years</strong> — directionally reliable. Import a 3rd year for significantly better accuracy.`
+       :`<strong>1 year</strong> only — projections are indicative. Wide scenario spread reflects high uncertainty.`}
+  ];
+  document.getElementById('proj-insights').innerHTML=ins.map(ins2=>`
+    <div class="proj-insight">
+      <div class="proj-insight-icon" style="background:${ins2.bg}">${ins2.icon}</div>
+      <div style="flex:1">
+        <div class="proj-insight-title">${ins2.title}</div>
+        <div class="proj-insight-body">${ins2.body}</div>
+        ${ins2.risk!==undefined?`<div class="risk-meter"><div class="risk-fill" style="width:${ins2.risk}%;background:${ins2.risk>66?'#c81c1c':ins2.risk>33?'#b45309':'#15803d'}"></div></div>`:''}
+      </div>
+    </div>`).join('');
+}
+
+// ── Company Summary tab ──
+function renderCompanySummary() {
+  const annuals=buildHistoricalAnnuals();
+  const el=document.getElementById('proj-company-summary');
+  if(!annuals.length){el.innerHTML='<p style="color:var(--t3);padding:20px">Load data to generate company summary.</p>';return;}
+  const lastA=annuals[annuals.length-1];
+  const firstA=annuals[0];
+  const allRevSvcs={}, allExpCats={};
+  annuals.forEach(a=>{
+    Object.entries(a.revServices||{}).forEach(([k,v])=>{ allRevSvcs[k]=(allRevSvcs[k]||0)+v; });
+    Object.entries(a.expCats||{}).forEach(([k,v])=>{ allExpCats[k]=(allExpCats[k]||0)+v; });
+  });
+  const topRevArr=Object.entries(allRevSvcs).sort((a,b)=>b[1]-a[1]).filter(([,v])=>v>0).slice(0,4);
+  const totalRev=Object.values(allRevSvcs).reduce((s,v)=>s+v,0);
+  const totalExp=Object.values(allExpCats).reduce((s,v)=>s+v,0);
+  const cumulRev=annuals.reduce((s,a)=>s+a.rev,0);
+  const cumulNet=annuals.reduce((s,a)=>s+a.net,0);
+  const avgMargin=annuals.reduce((s,a)=>s+a.margin,0)/annuals.length;
+  const revenueGrowth=firstA.rev>0&&annuals.length>1?((lastA.rev-firstA.rev)/firstA.rev*100):null;
+  const topServices=topRevArr.map(([k])=>k).join(', ');
+  const yearRange=annuals.length>1?`${firstA.year}–${lastA.year}`:lastA.year;
+  // Project next year base
+  const histRevs=annuals.map(a=>a.rev);
+  const nextRevEst=Math.max(0,projectValue(lastA.rev,capGrowth(projWeightedTrend(histRevs).growthRate,-0.5,1.5),1,'base','weighted'));
+  function capGrowth(g,mn,mx){return Math.max(mn,Math.min(mx,g||0));}
+  const profStatus=avgMargin>20?'strong profitability':'healthy operations';
+  // Prequal summary
+  const prequalText=
+    `Lyca Surveying Engineering Services LLC is a Dubai-based specialist surveying company ` +
+    `with a proven track record in delivering precision surveying and engineering support services across the UAE. ` +
+    `The company offers a comprehensive range of services including ${topServices}, ` +
+    `serving clients in construction, infrastructure, real estate development, and utilities sectors.\n\n` +
+    `Over the period ${yearRange}, Lyca Surveying has generated cumulative revenues of AED ${fn(cumulRev)}, ` +
+    `demonstrating ${revenueGrowth!==null&&revenueGrowth>0?`strong revenue growth of ${revenueGrowth.toFixed(0)}% `:'consistent operational performance '}` +
+    `with an average profit margin of ${avgMargin.toFixed(1)}%. ` +
+    `The company has maintained ${profStatus} through a combination of operational efficiency and a diversified service portfolio.\n\n` +
+    `With a projected revenue of AED ${fn(nextRevEst)} for the next fiscal year, ` +
+    `Lyca Surveying is well-positioned for continued growth. ` +
+    `The company's core strength lies in its technical expertise, experienced survey teams, and deep understanding of UAE regulatory requirements — ` +
+    `making it a reliable partner for major project developers and contractors across the region.`;
+  // Investor pitch
+  const investorText=
+    `Lyca Surveying Engineering Services LLC — Investment Overview\n\n` +
+    `Sector: Engineering & Surveying Services | Geography: UAE (Dubai-headquartered)\n\n` +
+    `Business: Lyca Surveying is a high-growth technical services company specialising in land, engineering, and construction surveying. ` +
+    `The company serves a diversified base of real estate developers, contractors, and government-linked infrastructure clients across the UAE.\n\n` +
+    `Financial Highlights (${yearRange}):\n` +
+    `• Cumulative Revenue: AED ${fn(cumulRev)}\n` +
+    `• Last Year Revenue: AED ${fn(lastA.rev)}\n` +
+    `• Average Profit Margin: ${avgMargin.toFixed(1)}%\n` +
+    `• Projected Next Year Revenue: AED ${fn(nextRevEst)}\n` +
+    (revenueGrowth!==null?`• Revenue Growth (${firstA.year}→${lastA.year}): ${revenueGrowth>0?'+':''}${revenueGrowth.toFixed(0)}%\n`:'')+
+    `\nGrowth Drivers:\n` +
+    `• Rapidly growing Surveyor Hire segment with scalable, asset-light model\n` +
+    `• Strong repeat business from established construction and infrastructure clients\n` +
+    `• UAE infrastructure pipeline (Expo legacy, DWTC, urban expansion) provides long runway\n` +
+    `• Proven management team with deep technical and regulatory expertise\n\n` +
+    `Use of Capital: Capacity expansion, equipment ownership (replacing rentals), and geographic expansion to Abu Dhabi and Northern Emirates.`;
+  el.innerHTML=`
+    <div class="data-notice" style="margin-bottom:12px">📋 These summaries are auto-generated from your financial data. Edit the text before using in official documents.</div>
+    <div class="cs-stat-row" style="margin-bottom:16px">
+      <div class="cs-stat"><div class="cs-stat-val">AED ${fn(lastA.rev)}</div><div class="cs-stat-lbl">Last Year Revenue</div></div>
+      <div class="cs-stat"><div class="cs-stat-val">${avgMargin.toFixed(1)}%</div><div class="cs-stat-lbl">Avg Profit Margin</div></div>
+      <div class="cs-stat"><div class="cs-stat-val">${annuals.length}</div><div class="cs-stat-lbl">Years of Data</div></div>
+      <div class="cs-stat"><div class="cs-stat-val">AED ${fn(cumulRev)}</div><div class="cs-stat-lbl">Cumulative Revenue</div></div>
+      ${revenueGrowth!==null?`<div class="cs-stat"><div class="cs-stat-val" style="color:${revenueGrowth>=0?'var(--gr)':'var(--rd)'}">${revenueGrowth>=0?'+':''}${revenueGrowth.toFixed(0)}%</div><div class="cs-stat-lbl">Revenue Growth</div></div>`:''}
+    </div>
+    <div class="company-summary-box">
+      <div class="cs-label">PREQUALIFICATION / COMPANY PROFILE</div>
+      <div class="cs-title">Lyca Surveying Engineering Services LLC</div>
+      <div class="cs-body" id="prequal-text">${prequalText.replace(/\n/g,'<br>')}</div>
+      <button class="copy-btn" onclick="copyText('prequal-text')">📋 Copy Profile Text</button>
+    </div>
+    <div class="company-summary-box" style="margin-top:12px">
+      <div class="cs-label">INVESTOR BRIEFING NOTE</div>
+      <div class="cs-title" style="font-size:16px">Investment Overview</div>
+      <div class="cs-body" id="investor-text">${investorText.replace(/\n/g,'<br>')}</div>
+      <button class="copy-btn" onclick="copyText('investor-text')">📋 Copy Investor Text</button>
+    </div>`;
+}
+
+function copyText(elId) {
+  const el=document.getElementById(elId);
+  if(!el)return;
+  const text=el.innerText;
+  navigator.clipboard.writeText(text).then(()=>showToast('✓ Copied to clipboard','s')).catch(()=>{
+    const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);showToast('✓ Copied','s');
+  });
+}
+
+
+
+// ─── Projections PDF Export ───
+function exportProjectionsPDF() {
+  const annuals = buildHistoricalAnnuals();
+  if (!annuals.length) { showToast('No data for projections PDF', 'e'); return; }
+  showToast('⏳ Building Projections PDF…', 'i');
+  try{
+  const {jsPDF} = window.jspdf;
+  const doc = new jsPDF({orientation:'landscape', unit:'mm', format:'a4'});
+  const W = 297, H = 210;
+  const horizonVal = document.getElementById('proj-horizon').value;
+  const method     = document.getElementById('proj-method').value;
+  const sc         = _projScenario;
+  const hz         = parseHorizon(horizonVal);
+  const bLabels    = {bear:'Pessimistic', base:'Base Case', bull:'Optimistic'};
+  const scColors   = {bear:[200,28,28], base:[30,77,183], bull:[21,128,61]};
+  const methodLabels = {weighted:'Weighted Trend', linear:'Linear Regression', cagr:'CAGR'};
+
+  const hdr = (d, sub) => {
+    d.setFillColor(30,77,183); d.rect(0,0,W,16,'F');
+    d.setFillColor(26,62,153); d.rect(0,14,W,2,'F');
+    d.setFontSize(10.5); d.setTextColor(255,255,255); d.setFont('helvetica','bold');
+    d.text('Lyca Surveying Engineering Services LLC — ' + sub, 10, 10);
+    d.setFontSize(7.5); d.setFont('helvetica','normal'); d.setTextColor(180,200,240);
+    const basis = annuals.map(a => a.year + (a.isPartial ? ` (${a.months}mo annualised)` : '')).join(', ');
+    d.text(`Method: ${methodLabels[method]} · Scenario: ${bLabels[sc]} · Based on: ${basis}`, 10, 14.5);
+    d.text('Generated ' + new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}), W-10, 14.5, {align:'right'});
+  };
+  const ftr = d => {
+    d.setFillColor(30,77,183); d.rect(0,H-7,W,7,'F');
+    d.setFontSize(6.5); d.setTextColor(180,200,240); d.setFont('helvetica','normal');
+    d.text('© Lyca Surveying Engineering Services LLC — Projections are model-based estimates and do not constitute financial advice.', 10, H-2);
+    try{d.saveGraphicsState();d.setGState(new d.GState({opacity:0.04}));d.setFontSize(80);d.setTextColor(30,77,183);d.setFont('helvetica','bold');d.text('LYCA',W/2,H/2+15,{align:'center'});d.restoreGraphicsState();}catch(e){}
+  };
+  const sHd = (d,t,x,y,c) => {
+    d.setFillColor(...c); d.rect(x,y,70,.7,'F');
+    d.setFontSize(7); d.setTextColor(...c); d.setFont('helvetica','bold'); d.text(t,x,y-1.5);
+  };
+  function capChart(id) {
+    const cv = document.getElementById(id);
+    if (!cv || cv.width === 0) return null;
+    try { return cv.toDataURL('image/png'); } catch(e) { return null; }
+  }
+
+  // ── KPI summary from current rendered state ──
+  const kpiEl = document.getElementById('proj-kpis');
+  const kpiCards = kpiEl ? kpiEl.querySelectorAll('.proj-kc') : [];
+  const kpiData = [];
+  kpiCards.forEach(card => {
+    kpiData.push({
+      lbl: card.querySelector('.proj-kc-lbl')?.textContent || '',
+      val: card.querySelector('.proj-kc-val')?.textContent || '',
+      sub: card.querySelector('.proj-kc-sub')?.textContent || '',
+      chg: card.querySelector('.proj-kc-change')?.textContent || ''
+    });
+  });
+
+  // PAGE 1: KPIs + Revenue/Expense Forecast Chart
+  hdr(doc, `${hz.label} ${bLabels[sc]} Scenario Projections`);
+  // KPI cards
+  kpiData.slice(0,6).forEach((k, i) => {
+    const x = 10 + i * 47;
+    doc.setFillColor(240,244,255); doc.roundedRect(x,20,43,22,2,2,'F');
+    doc.setFillColor(30,77,183); doc.rect(x,20,43,2,'F');
+    doc.setFontSize(5.5); doc.setTextColor(120,143,168); doc.setFont('helvetica','bold');
+    doc.text(k.lbl.toUpperCase(), x+2, 26);
+    doc.setFontSize(9); doc.setTextColor(13,27,62); doc.setFont('helvetica','bold');
+    doc.text(k.val.substring(0,18), x+2, 34);
+    doc.setFontSize(6); doc.setTextColor(80,100,130); doc.setFont('helvetica','normal');
+    if(k.sub) doc.text(k.sub.substring(0,22), x+2, 39);
+    if(k.chg) {
+      const isUp = k.chg.startsWith('▲');
+      doc.setFillColor(...(isUp?[220,252,231]:[254,226,226]));
+      doc.roundedRect(x+2,40,30,5,1,1,'F');
+      doc.setTextColor(...(isUp?[21,128,61]:[200,28,28]));
+      doc.setFontSize(5.5); doc.text(k.chg.substring(0,18), x+3, 44);
+    }
+  });
+  sHd(doc,'REVENUE & EXPENSE FORECAST',10,52,[30,77,183]);
+  const pc1img = capChart('pc1'); if(pc1img) doc.addImage(pc1img,'PNG',10,54,277,72);
+  ftr(doc);
+
+  // PAGE 2: Net Profit + Margin charts
+  doc.addPage(); hdr(doc,'Net Profit Projection & Margin Trend');
+  sHd(doc,'NET PROFIT PROJECTION — ALL SCENARIOS',10,24,[30,77,183]);
+  const pc2img = capChart('pc2'); if(pc2img) doc.addImage(pc2img,'PNG',10,26,136,85);
+  sHd(doc,'PROFIT MARGIN % TREND',153,24,[109,40,217]);
+  const pc3img = capChart('pc3'); if(pc3img) doc.addImage(pc3img,'PNG',153,26,136,85);
+  sHd(doc,'SEASONAL REVENUE PATTERN',10,120,[30,77,183]);
+  const pc4img = capChart('pc4'); if(pc4img) doc.addImage(pc4img,'PNG',10,122,136,72);
+  sHd(doc,'YEAR-ON-YEAR GROWTH RATE',153,120,[21,128,61]);
+  const pc5img = capChart('pc5'); if(pc5img) doc.addImage(pc5img,'PNG',153,122,136,72);
+  ftr(doc);
+
+  // PAGE 3: Forecast Table
+  doc.addPage(); hdr(doc,'Multi-Period Forecast Summary — All Scenarios');
+  const tblEl = document.getElementById('proj-table');
+  if (tblEl) {
+    const rows = tblEl.querySelectorAll('tr');
+    let ry = 24;
+    const colW = Math.min(36, (W-20) / Math.max(4, (rows[0]?.cells?.length||5)));
+    rows.forEach((row, ri) => {
+      if (ry > H - 20) return;
+      const cells = row.querySelectorAll('th,td');
+      if (!cells.length) return;
+      const isHeader = row.querySelector('th');
+      const isGroup  = cells.length === 1;
+      if (isGroup) {
+        doc.setFillColor(240,244,255); doc.rect(10, ry-3, W-20, 7, 'F');
+        doc.setFontSize(6); doc.setTextColor(30,77,183); doc.setFont('helvetica','bold');
+        doc.text((cells[0].textContent||'').toUpperCase().substring(0,60), 13, ry+2);
+        ry += 8; return;
+      }
+      if (isHeader) {
+        doc.setFillColor(245,247,252); doc.rect(10, ry-4, W-20, 7,'F');
+        doc.setFontSize(6); doc.setTextColor(120,143,168); doc.setFont('helvetica','bold');
+      } else {
+        doc.setFontSize(6.5); doc.setTextColor(13,27,62); doc.setFont('helvetica','normal');
+        if (ri%2===0) { doc.setFillColor(252,253,255); doc.rect(10,ry-4,W-20,7,'F'); }
+      }
+      cells.forEach((cell, ci) => {
+        const x = 10 + ci * colW;
+        const txt = (cell.textContent||'').trim().substring(0,18);
+        doc.text(txt, ci === 0 ? x+2 : x + colW - 2, ry, {align: ci===0 ? 'left':'right'});
+      });
+      ry += 8;
+    });
+  }
+  ftr(doc);
+
+  // PAGE 4: Action Plan
+  doc.addPage(); hdr(doc,'Strategic Action Plan');
+  const actionEl = document.getElementById('proj-action-plan');
+  if (actionEl) {
+    const steps = actionEl.querySelectorAll('.action-step');
+    let ay = 22;
+    const stepColors = {high:[200,28,28], med:[180,83,9], low:[21,128,61]};
+    steps.forEach((step, si) => {
+      if (ay > H - 28) { doc.addPage(); hdr(doc,'Strategic Action Plan (cont.)'); ftr(doc); ay = 22; }
+      const title = step.querySelector('.action-step-title')?.textContent?.trim() || '';
+      const desc  = step.querySelector('.action-step-desc')?.textContent?.trim()  || '';
+      const badge = step.querySelector('.action-step-badge')?.textContent?.trim() || '';
+      const isHigh  = badge.includes('High');
+      const c = isHigh ? stepColors.high : badge.includes('Medium') ? stepColors.med : stepColors.low;
+      // Step number circle
+      doc.setFillColor(...c); doc.circle(16, ay+3, 4, 'F');
+      doc.setFontSize(7); doc.setTextColor(255,255,255); doc.setFont('helvetica','bold');
+      doc.text((si+1).toString(), 16, ay+5, {align:'center'});
+      // Title
+      doc.setFontSize(7.5); doc.setTextColor(13,27,62); doc.setFont('helvetica','bold');
+      doc.text(title.replace(/[🚀📋💰📈🔁🏗️📊🌍]/g,'').trim().substring(0,70), 23, ay+2);
+      // Badge
+      doc.setFillColor(...c); doc.roundedRect(W-50, ay-2, 38, 6, 1,1,'F');
+      doc.setFontSize(5.5); doc.setTextColor(255,255,255);
+      doc.text(badge, W-31, ay+2.5, {align:'center'});
+      // Desc (wrap)
+      doc.setFontSize(6.5); doc.setTextColor(80,100,130); doc.setFont('helvetica','normal');
+      const words = desc.replace(/Step \d+:/g,'').trim().split(' ');
+      let line='', lineY=ay+8;
+      words.forEach(w => {
+        if ((line+' '+w).length > 100) {
+          if(lineY < H-15) doc.text(line.trim(), 23, lineY);
+          line=w; lineY+=5;
+        } else { line+=' '+w; }
+      });
+      if(line.trim() && lineY < H-15) doc.text(line.trim(), 23, lineY);
+      ay = lineY + 10;
+    });
+  }
+  ftr(doc);
+
+  // PAGE 5: Company Summary
+  doc.addPage(); hdr(doc,'Company Profile & Investor Summary');
+  let cy2 = 22;
+
+  // Robust text wrapper
+  const pdfTextBlock = (label, rawText, color) => {
+    const maxCharsPerLine = 130;
+    const lineH = 4.8;
+    const fontSize = 6.8;
+    if (cy2 > H - 30) { doc.addPage(); hdr(doc,'Company Profile & Investor Summary (cont.)'); ftr(doc); cy2 = 22; }
+    doc.setFillColor(...color); doc.rect(10, cy2, W-20, 2.5, 'F');
+    doc.setFontSize(7); doc.setTextColor(...color); doc.setFont('helvetica','bold');
+    doc.text(label.toUpperCase(), 11, cy2+1.8);
+    cy2 += 7;
+    doc.setFontSize(fontSize); doc.setTextColor(13,27,62); doc.setFont('helvetica','normal');
+    const paras = rawText.split('\n').map(function(p){return p.trim();}).filter(function(p){return p.length>0;});
+    paras.forEach(function(para) {
+      const firstChar = para.length > 0 ? para.charCodeAt(0) : 0;
+      const isBullet = firstChar === 8226 || para[0] === '-';
+      const indent = isBullet ? 14 : 11;
+      const maxChars = isBullet ? maxCharsPerLine - 4 : maxCharsPerLine;
+      const cleanPara = isBullet ? para.slice(para.indexOf(' ')+1) : para;
+      const words3 = cleanPara.split(' ');
+      let line3 = '';
+      if (isBullet) { doc.text('\u2022', 11, cy2); }
+      words3.forEach(function(w) {
+        const test = line3 ? line3+' '+w : w;
+        if (test.length > maxChars) {
+          if (cy2 > H - 14) { doc.addPage(); hdr(doc,'Company Profile & Investor Summary (cont.)'); ftr(doc); cy2 = 22; doc.setFontSize(fontSize); doc.setTextColor(13,27,62); doc.setFont('helvetica','normal'); }
+          if (line3.trim()) doc.text(line3.trim(), indent, cy2);
+          cy2 += lineH;
+          line3 = w;
+        } else { line3 = test; }
+      });
+      if (line3.trim()) {
+        if (cy2 > H - 14) { doc.addPage(); hdr(doc,'Company Profile & Investor Summary (cont.)'); ftr(doc); cy2 = 22; doc.setFontSize(fontSize); doc.setTextColor(13,27,62); doc.setFont('helvetica','normal'); }
+        doc.text(line3.trim(), indent, cy2);
+        cy2 += lineH;
+      }
+      cy2 += 1.5;
+    });
+    cy2 += 5;
+  };
+  const getCleanText = function(el) {
+    if (!el) return '';
+    const clone = el.cloneNode(true);
+    const brs = clone.querySelectorAll('br');
+    brs.forEach(function(br){ const t=document.createTextNode('\n'); br.parentNode.insertBefore(t,br); br.parentNode.removeChild(br); });
+    return (clone.innerText || clone.textContent || '').trim();
+  };
+  if (prequalEl2) pdfTextBlock('Company Profile — Prequalification', getCleanText(prequalEl2), [30,77,183]);
+  if (investorEl2) pdfTextBlock('Investor Briefing Note', getCleanText(investorEl2), [21,128,61]);
+  ftr(doc);
+
+  doc.save('Lyca_Projections_' + bLabels[sc].replace(' ','_') + '_' + hz.label.replace(' ','') + '.pdf');
+  showToast('✓ Projections PDF downloaded','s');
+  }catch(pErr){showToast('PDF error: '+pErr.message,'e');console.error('Proj PDF error:',pErr);}
+}
+
+// ── Page switcher ──
+function switchPage(page) {
+  const dashMain = document.querySelector('main');
+  const projPanel = document.getElementById('proj-panel');
+  document.querySelectorAll('.page-tab').forEach(t => t.classList.toggle('active', t.dataset.page === page));
+  // Sync header PDF button to current page
+  const hdrPDF = document.getElementById('b-pdf');
+  if (page === 'dashboard') {
+    dashMain.style.display = '';
+    projPanel.style.display = 'none';
+    if (hdrPDF && S.reports.length) hdrPDF.style.display = '';
+  } else {
+    dashMain.style.display = 'none';
+    projPanel.style.display = 'block';
+    if (hdrPDF) hdrPDF.style.display = 'none'; // projections has its own PDF button
+    renderProjections();
+  }
+}
+
+// ── Projection chart cleanup ──
+function pkd(id) {
+  if (PCH[id]) { PCH[id].destroy(); delete PCH[id]; }
 }
 </script>
 </body>
